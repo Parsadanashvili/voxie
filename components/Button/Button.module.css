@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  gap: 8px;
+  background: #474749;
+  border: none;
+  outline: inherit;
+  color: #fff;
+  border-radius: 14px;
+  cursor: pointer;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.root.primary {
+  background: #6c5dd3;
+  color: #fff;
+}
