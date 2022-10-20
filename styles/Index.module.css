@@ -1,0 +1,49 @@
+.welcome-wrapper {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.welcome-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.welcome-title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  margin: 0;
+}
+
+.welcome-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #808191;
+  text-align: center;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  margin: 0;
+}
+
+.welcome-action {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #6c5dd3;
+}
+
+.welcome-action a {
+  font-weight: 600;
+}
