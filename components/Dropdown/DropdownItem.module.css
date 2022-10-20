@@ -1,0 +1,31 @@
+.item {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer;
+  user-select: none;
+  appearance: none;
+  box-sizing: border-box;
+  white-space: nowrap;
+  padding: 9px 0;
+}
+
+.item .item-icon {
+  min-width: 28px;
+  color: #ffffff;
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+.item .item-icon svg {
+  height: 20px;
+}
+
+.item .item-text {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
