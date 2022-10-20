@@ -1,7 +1,3 @@
-import React from "react";
+export { default } from "./Card";
 
-const Card = () => {
-  return <div>Card</div>;
-};
-
-export default Card;
+export * from "./Card";
