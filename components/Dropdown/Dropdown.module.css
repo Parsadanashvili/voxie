@@ -1,0 +1,24 @@
+.wrapper {
+  background-color: #6c5dd3;
+  border-radius: 20px;
+}
+
+.wrapper::before {
+  content: "";
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: -6px;
+  z-index: -1;
+  background: rgba(108, 93, 211, 0.5);
+  border-radius: 20px;
+  position: absolute;
+}
+
+.wrapper .menu {
+  list-style: none;
+  margin: 0px;
+  padding: 18px 16px;
+  position: relative;
+  outline: 0px;
+}

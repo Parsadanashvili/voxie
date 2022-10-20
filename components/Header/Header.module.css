@@ -26,6 +26,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 6px;
+  cursor: pointer;
 }
 
 .right .profile h3 {
@@ -36,5 +37,4 @@
 
 .right .profile .picture {
   border-radius: 18px;
-  cursor: pointer;
 }
