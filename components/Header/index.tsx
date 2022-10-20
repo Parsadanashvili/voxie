@@ -1,8 +1,15 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import Container from "../Container";
-import Dropdown from "../Dropdown";
-import DropdownItem from "../DropdownItem";
+import {
+  UserIcon,
+  ArrowLeftOnRectangleIcon,
+} from "@heroicons/react/24/outline";
+import Dropdown, {
+  DropdownItem,
+  DropdownItemIcon,
+  DropdownItemText,
+} from "../Dropdown";
 import styles from "./Header.module.css";
 
 const Header = () => {
@@ -29,7 +36,7 @@ const Header = () => {
 
           <div className={styles.right}>
             <div className={styles.profile} onClick={handleClick}>
-              <h3>@Parsadanashvili</h3>
+              <h3>@parsadanashvili</h3>
               <Image
                 className={styles.picture}
                 src={"/imgs/profile.png"}
@@ -40,7 +47,18 @@ const Header = () => {
             </div>
 
             <Dropdown anchorEl={anchorEl} open={open} onClose={handleClose}>
-              <DropdownItem>Gamarjoba</DropdownItem>
+              <DropdownItem>
+                <DropdownItemIcon>
+                  <UserIcon />
+                </DropdownItemIcon>
+                <DropdownItemText>Profile</DropdownItemText>
+              </DropdownItem>
+              <DropdownItem>
+                <DropdownItemIcon>
+                  <ArrowLeftOnRectangleIcon />
+                </DropdownItemIcon>
+                <DropdownItemText>Log Out</DropdownItemText>
+              </DropdownItem>
             </Dropdown>
           </div>
         </div>
