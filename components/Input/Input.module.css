@@ -1,0 +1,23 @@
+.wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.field {
+  background-color: transparent;
+  color: #808191;
+  border: 2px solid rgba(228, 228, 228, 0.1);
+  border-radius: 15px;
+  padding: 14px;
+  outline: none;
+  font-family: HelveticaNeue, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+}
