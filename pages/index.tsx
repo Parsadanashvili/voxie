@@ -7,7 +7,7 @@ import styles from "../styles/Index.module.css";
 
 const Home: NextPage = () => {
   return (
-    <main className={styles["welcome-wrapper"]}>
+    <main className={styles["wrapper"]}>
       <Card width={400}>
         <div className={styles["welcome-inner"]}>
           <h2 className={styles["welcome-title"]}>Welcome to Voxie!</h2>
