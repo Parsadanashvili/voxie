@@ -20,4 +20,10 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 15px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.field:active,
+.field:focus {
+  border-color: #6c5dd3;
 }

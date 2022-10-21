@@ -1,41 +1,53 @@
-import React, {
-  ChangeEvent,
-  FormEvent,
-  KeyboardEvent,
-  KeyboardEventHandler,
-} from "react";
-import Link from "next/link";
-import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import React, { FormEvent, KeyboardEvent, useMemo, useState } from "react";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Button from "../../components/Button";
-import Input from "../../components/Input";
 import styles from "../../styles/Auth.module.css";
-import stepStyles from "./OTPStep.module.css";
+import OtpInput from "../OtpInput";
 
-const OTPStep = () => {
-  const handleSubmit = (e: FormEvent) => {};
+const VALUE_LENGTH = 4;
 
-  const onKeydownOtp = (e: KeyboardEvent<HTMLInputElement>) => {};
+interface Props {
+  onNext: () => {} | void;
+}
+
+const OTPStep = ({ onNext }: Props) => {
+  const [otp, setOtp] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    onNext();
+  };
+
+  const handleChange = (value: string) => {
+    setOtp(value);
+  };
 
   return (
     <>
+      <h2>Registration</h2>
+
       <div className={styles.text}>
         <LockClosedIcon width={20} /> Enter one time password
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={stepStyles.otp_inputs}>
-          <input onKeyDown={onKeydownOtp} className={stepStyles.input} />
-          <input onKeyDown={onKeydownOtp} className={stepStyles.input} />
-          <input onKeyDown={onKeydownOtp} className={stepStyles.input} />
-          <input onKeyDown={onKeydownOtp} className={stepStyles.input} />
-        </div>
+        <OtpInput
+          value={otp}
+          valueLength={VALUE_LENGTH}
+          onChange={handleChange}
+        />
 
         <Button type="submit" color="primary">
           Next
           <ArrowRightIcon width={16} />
         </Button>
       </form>
+
+      <div className={styles.action}>
+        Didn’t receive? <a>Tap to resend</a>
+      </div>
     </>
   );
 };

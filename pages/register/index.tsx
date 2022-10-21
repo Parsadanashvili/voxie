@@ -2,11 +2,13 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React, { ReactElement, useState } from "react";
 import Card from "../../components/Card";
+import AvatarStep from "../../components/Registration/AvatarStep";
 import EmailStep from "../../components/Registration/EmailStep";
 import OTPStep from "../../components/Registration/OTPStep";
+import UsernameStep from "../../components/Registration/UsernameStep";
 import styles from "../../styles/Auth.module.css";
 
-const steps = [EmailStep, OTPStep];
+const steps = [EmailStep, OTPStep, UsernameStep, AvatarStep];
 
 const Register: NextPage = () => {
   const [step, setStep] = useState(0);
@@ -24,8 +26,6 @@ const Register: NextPage = () => {
 
       <Card width={400}>
         <div className={styles.box}>
-          <h2>Registration</h2>
-
           <Step onNext={handleNext} />
         </div>
       </Card>

@@ -1,41 +1,62 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import Joi from "joi";
+import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import styles from "../../styles/Auth.module.css";
+import useForm from "../../hooks/useForm";
 
 interface Props {
-  onNext: (value: { [key: string]: string | number }) => void | {};
+  onNext: () => void | {};
 }
 
 const EmailStep = ({ onNext }: Props) => {
-  const [email, setEmail] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const { values, errors, validate, inputHandler } = useForm([
+    {
+      name: "email",
+      value: "",
+      validation: Joi.string()
+        .email({ tlds: { allow: false } })
+        .required()
+        .label("Email"),
+    },
+  ]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    onNext({
-      email,
-    });
+    if (Object.keys(errors).length == 0 && !isDisabled) {
+      return onNext();
+    }
+
+    validate();
   };
 
-  const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  useEffect(() => {
+    if (isDisabled && Object.keys(errors).length != 0) {
+      setIsDisabled(false);
+    }
+  }, [errors]);
 
   return (
     <>
+      <h2>Registration</h2>
+
       <div className={styles.text}>
         <EnvelopeIcon width={20} /> Enter your email
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
+          name="email"
           placeholder={"E-mail"}
-          value={email}
-          onChange={handleChangeEmail}
+          value={values?.email}
+          onChange={inputHandler}
+          autoComplete={"off"}
         />
         <Button type="submit" color="primary">
           Next
@@ -48,7 +69,7 @@ const EmailStep = ({ onNext }: Props) => {
         Privacy Policy. Thanks!
       </div>
 
-      <div className={styles.action}>
+      <div className={styles.action + " " + styles.primary}>
         Already registered?{" "}
         <Link href={"/login"} passHref>
           Sign in
