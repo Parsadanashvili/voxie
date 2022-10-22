@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  ForwardedRef,
-  forwardRef,
-  Fragment,
-  ReactNode,
-} from "react";
+import React, { FC, ForwardedRef, forwardRef, ReactNode } from "react";
 import styles from "./Input.module.css";
 
 interface Props {
@@ -15,6 +9,7 @@ interface Props {
   value?: string | number | readonly string[] | undefined;
   name?: string;
   id?: string;
+  error?: string;
   autoComplete?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -35,6 +30,7 @@ const Input: FC<Props> = forwardRef(
       value,
       name,
       id,
+      error,
       autoComplete,
       onChange,
       onFocus,
@@ -51,7 +47,7 @@ const Input: FC<Props> = forwardRef(
         <input
           ref={ref}
           type={type}
-          className={styles.field}
+          className={styles.field + (error ? " " + styles["is-invalid"] : "")}
           placeholder={placeholder}
           name={name}
           id={id}

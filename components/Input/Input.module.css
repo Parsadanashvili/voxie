@@ -27,3 +27,7 @@
 .field:focus {
   border-color: #6c5dd3;
 }
+
+.field.is-invalid {
+  border-color: #ff5a5f;
+}
