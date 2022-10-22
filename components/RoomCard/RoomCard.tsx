@@ -1,13 +1,10 @@
 import Image from "next/image";
 import React from "react";
+import { Room } from "../../types";
 import styles from "./RoomCard.module.css";
 
-interface RoomProps {
-  title: string;
-}
-
 interface RoomCardProps {
-  room: RoomProps;
+  room: Room;
 }
 
 const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
@@ -19,26 +16,28 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
         <div className={styles.subtitle}>Speakers:</div>
 
         <div className={styles.speakers}>
-          {[1, 2, 3, 4].map((key) => (
-            <div key={key} className={styles.avatar}>
-              <Image
-                src={"/imgs/avatar.jpg"}
-                objectFit={"cover"}
-                width={64}
-                height={64}
-              />
-            </div>
-          ))}
-          <div className={`${styles.avatar} ${styles.more}`}>
-            <div className={styles.badge}>+1</div>
+          {room.users.slice(0, 10).map((user, index) => {
+            const overlay =
+              index + 1 == 10 && room.users.length > 10 ? styles.more : "";
+            const cn = `${styles.avatar} ${overlay}`;
 
-            <Image
-              src={"/imgs/profile.png"}
-              objectFit={"cover"}
-              width={64}
-              height={64}
-            />
-          </div>
+            return (
+              <div key={user.username} className={cn}>
+                {overlay && (
+                  <div className={styles.badge}>
+                    +{room.users.length - (index + 1)}
+                  </div>
+                )}
+
+                <Image
+                  src={user.avatar}
+                  objectFit={"cover"}
+                  width={64}
+                  height={64}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  username      String?  @unique
+  email         String   @unique
+  avatar        String?  @default("/imgs/avatar.jpg")
+  //currentRoom
+  currentRoom   Room?    @relation("currentRoom", fields: [currentRoomId], onDelete: SetNull, references: [id])
+  currentRoomId Int?     @map(name: "current_room_id")
+  //creator
+  Room          Room[]   @relation("creator")
+  createdAt     DateTime @default(now()) @map(name: "created_at")
+  updatedAt     DateTime @updatedAt @map(name: "updated_at")
+
+  @@map(name: "users")
+}
+
+model OTP {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  otp       String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  expiresAt DateTime @default(now()) @map(name: "expires_at")
+
+  @@map(name: "otps")
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  title     String
+  //currentRoom
+  users     User[]   @relation("currentRoom")
+  //creator
+  creator   User?    @relation("creator", fields: [creatorId], references: [id])
+  creatorId Int?     @map(name: "creator_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map(name: "rooms")
+}
