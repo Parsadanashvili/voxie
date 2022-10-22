@@ -1,65 +1,25 @@
-import React, { FC, ForwardedRef, forwardRef, ReactNode } from "react";
+import React, { forwardRef } from "react";
 import styles from "./Input.module.css";
 
-interface Props {
-  icon?: ReactNode;
-  className?: string;
-  type?: string;
-  placeholder?: string;
-  value?: string | number | readonly string[] | undefined;
-  name?: string;
-  id?: string;
+export interface InputPops extends React.ComponentPropsWithoutRef<"input"> {
+  textarea?: boolean;
+  rows?: number;
   error?: string;
-  autoComplete?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  ref?: ForwardedRef<HTMLInputElement>;
 }
 
-const Input: FC<Props> = forwardRef(
-  (
-    {
-      icon,
-      className,
-      type,
-      placeholder,
-      value,
-      name,
-      id,
-      error,
-      autoComplete,
-      onChange,
-      onFocus,
-      onKeyDown,
-      onKeyUp,
-      onKeyPress,
-      onClick,
-      ...props
-    }: Props,
-    ref?: ForwardedRef<HTMLInputElement>
-  ) => {
+const Input = forwardRef<HTMLInputElement, InputPops>(
+  ({ className, textarea, error, ...props }, ref) => {
+    const ring = error ? styles["is-invalid"] : "";
+    const cn = `${styles.field} ${ring}`;
+
     return (
       <div className={styles.wrapper}>
-        <input
-          ref={ref}
-          type={type}
-          className={styles.field + (error ? " " + styles["is-invalid"] : "")}
-          placeholder={placeholder}
-          name={name}
-          id={id}
-          value={value}
-          onChange={onChange}
-          onFocus={onFocus}
-          onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
-          onKeyPress={onKeyPress}
-          autoComplete={autoComplete}
-          {...props}
-        />
+        {textarea ? (
+          <textarea ref={ref as any} className={cn} {...(props as any)} />
+        ) : (
+          <input ref={ref} className={cn} {...props} />
+        )}
+        {error && <div className={styles["error-msg"]}>{error}</div>}
       </div>
     );
   }

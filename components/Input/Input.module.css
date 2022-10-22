@@ -31,3 +31,12 @@
 .field.is-invalid {
   border-color: #ff5a5f;
 }
+
+.field + .error-msg {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  color: #ff5a5f;
+  margin-top: 6px;
+}
