@@ -8,6 +8,6 @@ import { NextPage } from "next";
  * @property {string} getPageTitle - Page title
  *
  */
-export type CustomNextPage<T> = NextPage<T> & {
+export type CustomNextPage<T = {}> = NextPage<T> & {
   getPageTitle?: string;
 };
