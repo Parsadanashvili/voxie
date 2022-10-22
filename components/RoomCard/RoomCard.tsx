@@ -19,8 +19,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room }) => {
         <div className={styles.subtitle}>Speakers:</div>
 
         <div className={styles.speakers}>
-          {[1, 2, 3, 4].map(() => (
-            <div className={styles.avatar}>
+          {[1, 2, 3, 4].map((key) => (
+            <div key={key} className={styles.avatar}>
               <Image
                 src={"/imgs/avatar.jpg"}
                 objectFit={"cover"}
