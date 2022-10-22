@@ -1,42 +1,21 @@
-import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import Button from "../components/Button";
-import Card from "../components/Card";
 import { CustomNextPage } from "../types/pageProps";
-import styles from "../styles/Index.module.css";
+import Welcome from "../components/Welcome";
+import Dashboard from "../components/Dashboard";
+
+const auth = true;
 
 const Home: CustomNextPage = () => {
-  return (
-    <main className={styles["wrapper"]}>
-      <Card width={400}>
-        <div className={styles["welcome-inner"]}>
-          <h2 className={styles["welcome-title"]}>Welcome to Voxie!</h2>
-
-          <p className={styles["welcome-text"]}>
-            We’re working hard to get Voxie ready for everyone! While we wrap
-            the finishing youches, we’re adding people gradually to make sure
-            nothing breaks
-          </p>
-
-          <Link href={"/register"}>
-            <Button color="primary">
-              Get started
-              <ChevronRightIcon width={16} />
-            </Button>
-          </Link>
-
-          <div className={styles["welcome-action"]}>
-            Already registered?{" "}
-            <Link href={"/login"} passHref>
-              Sign in
-            </Link>
-          </div>
-        </div>
-      </Card>
-    </main>
-  );
+  if (auth) {
+    return <Dashboard />;
+  } else {
+    return <Welcome />;
+  }
 };
 
-Home.getPageTitle = "Welcome";
+if (auth) {
+  Home.getPageTitle = "Dashboard";
+} else {
+  Home.getPageTitle = "Welcome";
+}
 
 export default Home;

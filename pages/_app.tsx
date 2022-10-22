@@ -8,12 +8,14 @@ type ExtendedAppProps = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: ExtendedAppProps) {
-  const pageTitle = ["Voxie", "-", Component.getPageTitle ?? "Voice rooms"];
+  const { getPageTitle: title } = Component;
+
+  const pageTitle = title ? `${title} | Voxie` : "Voxie";
 
   return (
     <>
       <Head>
-        <title>{pageTitle.join(" ")}</title>
+        <title>{pageTitle}</title>
       </Head>
       <Component {...pageProps} />
     </>

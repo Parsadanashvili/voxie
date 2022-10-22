@@ -25,5 +25,12 @@
 
 .root.primary {
   background: #6c5dd3;
-  color: #fff;
+}
+
+.root.success {
+  background: #55ab67;
+}
+
+.root.danger {
+  background: #ff5a5f;
 }
