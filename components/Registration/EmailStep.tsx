@@ -7,6 +7,7 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import styles from "../../styles/Auth.module.css";
 import useForm from "../../hooks/useForm";
+import Spinner from "../Spinner";
 
 interface Props {
   onNext: () => void | {};
@@ -55,6 +56,7 @@ const EmailStep = ({ onNext }: Props) => {
           name="email"
           placeholder={"E-mail"}
           value={values?.email}
+          error={errors.email}
           onChange={inputHandler}
           autoComplete={"off"}
         />

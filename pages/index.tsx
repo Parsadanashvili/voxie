@@ -1,11 +1,11 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import type { NextPage } from "next";
 import Link from "next/link";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import { CustomNextPage } from "../types/pageProps";
 import styles from "../styles/Index.module.css";
 
-const Home: NextPage = () => {
+const Home: CustomNextPage = () => {
   return (
     <main className={styles["wrapper"]}>
       <Card width={400}>
@@ -36,5 +36,7 @@ const Home: NextPage = () => {
     </main>
   );
 };
+
+Home.getPageTitle = "Welcome";
 
 export default Home;

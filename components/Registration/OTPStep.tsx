@@ -1,4 +1,4 @@
-import React, { FormEvent, KeyboardEvent, useMemo, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Button from "../../components/Button";
@@ -13,15 +13,22 @@ interface Props {
 
 const OTPStep = ({ onNext }: Props) => {
   const [otp, setOtp] = useState("");
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    onNext();
+    if (otp.length == VALUE_LENGTH) {
+      return onNext();
+    }
+
+    setIsInvalid(true);
   };
 
   const handleChange = (value: string) => {
-    setOtp(value);
+    setOtp(value.trim());
+
+    if (value.trim().length == VALUE_LENGTH) setIsInvalid(false);
   };
 
   return (
@@ -37,6 +44,7 @@ const OTPStep = ({ onNext }: Props) => {
           value={otp}
           valueLength={VALUE_LENGTH}
           onChange={handleChange}
+          isInvalid={isInvalid}
         />
 
         <Button type="submit" color="primary">

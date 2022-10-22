@@ -1,26 +1,42 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import styles from "../../styles/Auth.module.css";
+import useForm from "../../hooks/useForm";
+import Joi from "joi";
 
 interface Props {
   onNext: () => void | {};
 }
 
 const UsernameStep = ({ onNext }: Props) => {
-  const [username, setUsername] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  const { values, errors, validate, inputHandler } = useForm([
+    {
+      name: "username",
+      value: "",
+      validation: Joi.string().max(16).min(3).required().label("Username"),
+    },
+  ]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    onNext();
+    if (Object.keys(errors).length == 0 && !isDisabled) {
+      return onNext();
+    }
+
+    validate();
   };
 
-  const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
+  useEffect(() => {
+    if (isDisabled && Object.keys(errors).length != 0) {
+      setIsDisabled(false);
+    }
+  }, [errors]);
 
   return (
     <>
@@ -32,9 +48,12 @@ const UsernameStep = ({ onNext }: Props) => {
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
+          name="username"
           placeholder={"Username"}
-          value={username}
-          onChange={handleChangeUsername}
+          value={values?.username}
+          error={errors?.username}
+          onChange={inputHandler}
+          autoComplete={"off"}
         />
         <Button type="submit" color="primary">
           Next
