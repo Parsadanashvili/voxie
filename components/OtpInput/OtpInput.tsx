@@ -5,11 +5,12 @@ interface Props {
   value: string;
   valueLength: number;
   onChange: (value: string) => {} | void;
+  isInvalid?: boolean;
 }
 
 const RE_DIGIT = new RegExp(/^\d+$/);
 
-const OtpInput = ({ value, valueLength, onChange }: Props) => {
+const OtpInput = ({ value, valueLength, onChange, isInvalid }: Props) => {
   const valueItems = useMemo(() => {
     const valueArray = value.split("");
     const items: Array<string> = [];
@@ -52,8 +53,6 @@ const OtpInput = ({ value, valueLength, onChange }: Props) => {
     const target = e.target;
     let targetValue = target.value.trim();
     const isTargetValueDigit = RE_DIGIT.test(targetValue);
-
-    console.log(!isTargetValueDigit && targetValue !== "");
 
     if (!isTargetValueDigit && targetValue !== "") {
       return;
@@ -132,16 +131,27 @@ const OtpInput = ({ value, valueLength, onChange }: Props) => {
 
   return (
     <div className={styles.wrap}>
-      {valueItems.map((digit, idx) => (
-        <input
-          value={digit}
-          key={idx}
-          onChange={(e) => inputOnChange(e, idx)}
-          onKeyDown={inputOnKeyDown}
-          onFocus={inputOnFocus}
-          className={styles.input}
-        />
-      ))}
+      {valueItems.map((digit, idx) => {
+        let classNames = [styles.input];
+
+        if (
+          isInvalid &&
+          (idx + 1 > value.length || value.length == valueLength)
+        ) {
+          classNames.push(styles["is-invalid"]);
+        }
+
+        return (
+          <input
+            value={digit}
+            key={idx}
+            onChange={(e) => inputOnChange(e, idx)}
+            onKeyDown={inputOnKeyDown}
+            onFocus={inputOnFocus}
+            className={classNames.join(" ")}
+          />
+        );
+      })}
     </div>
   );
 };

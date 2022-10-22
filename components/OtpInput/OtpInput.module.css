@@ -31,3 +31,7 @@
 .input:focus {
   border-color: #6c5dd3;
 }
+
+.input.is-invalid {
+  border-color: #ff5a5f;
+}
