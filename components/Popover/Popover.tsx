@@ -288,4 +288,6 @@ const Popover = React.forwardRef(
   }
 );
 
+Popover.displayName = "Popover";
+
 export default Popover;
