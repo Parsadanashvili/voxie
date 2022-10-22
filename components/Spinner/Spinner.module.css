@@ -1,0 +1,44 @@
+.root {
+  height: 20px;
+  width: 20px;
+  animation-name: spin;
+  animation-duration: 3000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.root.sm {
+  height: 16px;
+  width: 16px;
+}
+
+.root.md {
+  height: 24px;
+  width: 24px;
+}
+
+.root.lg {
+  height: 32px;
+  width: 32px;
+}
+
+.root.primary {
+  color: #6c5dd3;
+}
+
+.root.success {
+  color: #55ab67;
+}
+
+.root.danger {
+  color: #ff5a5f;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
