@@ -1,8 +1,8 @@
 import { Session } from "./../../../contexts/types";
-const jwt = require("jsonwebtoken");
 import getConfig from "next/config";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
+import { encode } from "../../../utils/jwt-token";
 const { serverRuntimeConfig } = getConfig();
 
 interface ResponseData extends Session {}
@@ -40,9 +40,9 @@ export default function handler(
       where: { email },
     });
 
-    const token = jwt.sign({ sub: user.id }, serverRuntimeConfig.jwtSecret, {
-      expiresIn: "7d",
-      algorithm: "HS256",
+    const token = await encode({
+      token: { sub: user.id },
+      secret: serverRuntimeConfig.jwtSecret,
     });
 
     const today = new Date();

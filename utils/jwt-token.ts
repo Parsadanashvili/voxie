@@ -1,9 +1,11 @@
+// @ts-expect-error
 import { getCookie } from "cookies-next";
-const jwt = require("jsonwebtoken");
+import * as jose from "jose";
 import { JWTEncodeParams, JWTDecodeParams } from "./../types/jwtProps";
 import { GetServerSidePropsContext, NextApiRequest } from "next";
 import { NextRequest } from "next/server";
 import { JWT, JWTOptions } from "../types";
+import hkdf from "@panva/hkdf";
 
 const DEFAULT_MAX_AGE = 7 * 24 * 60 * 60; // 7 days
 
@@ -12,16 +14,23 @@ const now = () => (Date.now() / 1000) | 0;
 export async function encode(params: JWTEncodeParams) {
   const { token = {}, secret, maxAge = DEFAULT_MAX_AGE } = params;
 
-  return jwt.sign(token, secret, {
-    expiresIn: now() + maxAge,
-  });
+  const encryptionSecret = await getDerivedEncryptionKey(secret);
+
+  return await new jose.EncryptJWT(token)
+    .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
+    .setIssuedAt()
+    .setExpirationTime(now() + maxAge)
+    .encrypt(encryptionSecret);
 }
 
 export async function decode(params: JWTDecodeParams): Promise<JWT | null> {
   const { token, secret } = params;
   if (!token) return null;
-
-  return jwt.verify(token, secret);
+  const encryptionSecret = await getDerivedEncryptionKey(secret);
+  const { payload } = await jose.jwtDecrypt(token, encryptionSecret, {
+    clockTolerance: 15,
+  });
+  return payload;
 }
 
 export interface GetTokenParams<R extends boolean = false> {
@@ -52,7 +61,11 @@ export async function getToken<R extends boolean = false>(
 
   if (!req) throw new Error("Must pass `req` to JWT getToken()");
 
-  let token = JSON.parse(getCookie(cookieName) as string);
+  let token = getCookie(cookieName, { req });
+
+  console.log(req.cookies);
+
+  // let token = JSON.parse(cookie);
 
   const authorizationHeader =
     req.headers instanceof Headers
@@ -76,4 +89,14 @@ export async function getToken<R extends boolean = false>(
     // @ts-expect-error
     return null;
   }
+}
+
+async function getDerivedEncryptionKey(secret: string | Buffer) {
+  return await hkdf(
+    "sha256",
+    secret,
+    "",
+    "NextAuth.js Generated Encryption Key",
+    32
+  );
 }

@@ -1,7 +1,9 @@
 import { Awaitable } from ".";
 import { Session } from "../contexts/types";
 
-export interface DefaultJWT extends Session {}
+export interface DefaultJWT extends Session {
+  sub?: string;
+}
 
 /**
  * Returned by the `jwt` callback and `getToken`, when using JWT sessions

@@ -5,8 +5,8 @@ export interface DefaultSession {
     email?: string | null;
     avatar?: string | null;
   };
-  accessToken: string;
-  expiresAt: string;
+  accessToken?: string;
+  expiresAt?: string;
 }
 
 export interface Session extends DefaultSession {}

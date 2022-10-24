@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
 import { NextApiRequest, NextApiResponse } from "next";
 import getConfig from "next/config";
 import prisma from "../../../lib/prisma";
+import { decode } from "../../../utils/jwt-token";
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -17,7 +17,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const token = req.headers.authorization?.split(" ")[1];
 
-      var decoded = jwt.verify(token, serverRuntimeConfig.jwtSecret);
+      var decoded = decode({
+        token,
+        secret: serverRuntimeConfig.jwtSecret,
+      });
 
       const user = await prisma.user.findFirst({
         where: {
