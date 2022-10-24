@@ -1,12 +1,49 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { MiddlewareOptions } from "./types/middlewareProps";
+import { NextMiddleware, NextRequest, NextResponse } from "next/server";
+import { JWT } from "./types";
+import { getToken } from "./utils/jwt-token";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  let route = request.url.split("/").slice(-1)[0];
+type NextMiddlewareResult = ReturnType<NextMiddleware> | void; // eslint-disable-line @typescript-eslint/no-invalid-void-type
 
-  if (!route) {
-    // return NextResponse.redirect(new URL("/login", request.url));
+async function handleMiddleware(
+  req: NextRequest,
+  options: MiddlewareOptions | undefined,
+  onSuccess?: (token: JWT | null) => Promise<NextMiddlewareResult>
+) {
+  const { pathname, origin, basePath } = req.nextUrl;
+
+  const loginPage = options?.pages?.login ?? "/login";
+  const registerPage = options?.pages?.register ?? "/register";
+  const publicPaths = ["/_next", "/favicon.ico"];
+
+  if (
+    [loginPage, registerPage].includes(pathname) ||
+    publicPaths.some((p) => pathname.startsWith(p))
+  ) {
+    return;
   }
+
+  const secret = options?.secret ?? process.env.NEXT_PUBLIC_JWT_SECRET;
+
+  if (!secret) {
+    console.error(`[error][NO_JWT_SECRET]`);
+
+    const errorUrl = new URL(`/`, origin);
+
+    return NextResponse.redirect(errorUrl);
+  }
+
+  const token = await getToken({
+    req,
+    decode: options?.jwt?.decode,
+    cookieName: options?.cookieName,
+    secret,
+  });
+
+  const isAuthorized =
+    (await options?.callbacks?.authorized?.({ req, token })) ?? !!token;
+
+  // the user is not logged in, redirect to the sign-in page
+  const signInUrl = new URL(`${basePath}${loginPage}`, origin);
+  return NextResponse.redirect(signInUrl);
 }

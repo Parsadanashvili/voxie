@@ -1,0 +1,10 @@
+const GenerateOtp = (length: number) => {
+  var digits = "0123456789";
+  let OTP: string = "";
+  for (let i = 0; i < length; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+  return OTP;
+};
+
+export default GenerateOtp;
