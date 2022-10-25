@@ -5,14 +5,17 @@ import Button from "../../components/Button";
 import styles from "../../styles/Auth.module.css";
 import OtpInput from "../OtpInput";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { setCookie } from "cookies-next";
 
 const VALUE_LENGTH = 4;
 
 interface Props {
-  onNext: () => {} | void;
+  onNext: (data: { [key: string]: string }) => void | {};
+  stepData: { [key: string]: string };
 }
 
-const OTPStep = ({ onNext }: Props) => {
+const OTPStep = ({ onNext, stepData }: Props) => {
   const router = useRouter();
 
   const [otp, setOtp] = useState("");
@@ -22,7 +25,19 @@ const OTPStep = ({ onNext }: Props) => {
     e.preventDefault();
 
     if (otp.length == VALUE_LENGTH) {
-      return router.push("/");
+      return axios
+        .post("/api/login/verify", {
+          email: stepData?.email,
+          otp,
+        })
+        .then((res) => {
+          const session = JSON.stringify(res.data);
+
+          setCookie("session", session);
+
+          window.location.href = "/";
+        })
+        .catch(() => setIsInvalid(true));
     }
 
     setIsInvalid(true);

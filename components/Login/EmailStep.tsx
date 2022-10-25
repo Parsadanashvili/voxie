@@ -1,5 +1,6 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
+import axios from "axios";
 import Joi from "joi";
 import Link from "next/link";
 import React, { FormEvent, useEffect, useState } from "react";
@@ -9,13 +10,14 @@ import Button from "../Button";
 import Input from "../Input";
 
 interface Props {
-  onNext: () => void | {};
+  onNext: (data: { [key: string]: string }) => void | {};
+  stepData: { [key: string]: string };
 }
 
 const EmailStep = ({ onNext }: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const { values, errors, validate, inputHandler } = useForm([
+  const { values, errors, validate, inputHandler, setErrors } = useForm([
     {
       name: "email",
       value: "",
@@ -26,11 +28,24 @@ const EmailStep = ({ onNext }: Props) => {
     },
   ]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (Object.keys(errors).length == 0 && !isDisabled) {
-      return onNext();
+      axios
+        .post("/api/login", {
+          email: values.email,
+        })
+        .then(() =>
+          onNext({
+            email: String(values.email),
+          })
+        )
+        .catch((err) =>
+          setErrors({
+            email: err,
+          })
+        );
     }
 
     validate();

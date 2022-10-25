@@ -17,7 +17,7 @@ const Welcome = () => {
             nothing breaks
           </p>
 
-          <Link href={"/register"}>
+          <Link href={"/register"} passHref={false}>
             <Button color="primary">
               Get started
               <ChevronRightIcon width={16} />

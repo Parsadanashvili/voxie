@@ -1,4 +1,4 @@
-import { Session } from "./../../../contexts/types";
+import { Session } from "./../../../types";
 import getConfig from "next/config";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";

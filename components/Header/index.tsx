@@ -11,8 +11,11 @@ import Dropdown, {
   DropdownItemText,
 } from "../Dropdown";
 import styles from "./Header.module.css";
+import { useSession } from "../../hooks/useSession";
 
 const Header = () => {
+  const { data: session, status } = useSession();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -26,7 +29,7 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  return (
+  return status === "authenticated" ? (
     <header className={styles.wrapper}>
       <Container>
         <div className={styles.inner}>
@@ -36,13 +39,13 @@ const Header = () => {
 
           <div className={styles.right}>
             <div className={styles.profile} onClick={handleClick}>
-              <h3>@parsadanashvili</h3>
+              <h3>@{session?.user?.username}</h3>
               <Image
                 className={styles.picture}
-                src={"/imgs/profile.png"}
+                src={session?.user?.avatar ?? ""}
                 width={56}
                 height={56}
-                objectFit={"fill"}
+                objectFit={"cover"}
               />
             </div>
 
@@ -64,6 +67,8 @@ const Header = () => {
         </div>
       </Container>
     </header>
+  ) : (
+    ""
   );
 };
 

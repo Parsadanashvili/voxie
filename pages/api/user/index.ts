@@ -7,7 +7,7 @@ const { serverRuntimeConfig } = getConfig();
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
-    case "POST":
+    case "GET":
       return user();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
@@ -15,24 +15,27 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   async function user() {
     try {
-      const token = req.headers.authorization?.split(" ")[1];
+      const token = req.headers.authorization;
 
-      var decoded = decode({
+      var decoded = await decode({
         token,
         secret: serverRuntimeConfig.jwtSecret,
       });
 
-      const user = await prisma.user.findFirst({
-        where: {
-          id: decoded.sub,
-        },
-      });
+      if (decoded) {
+        const user = await prisma.user.findFirst({
+          where: {
+            id: Number(decoded.sub),
+          },
+        });
 
-      // return basic user details and token
-      return res.status(200).json({
-        user: user,
-        expiresAt: new Date(decoded.exp).toLocaleString(),
-      });
+        // return basic user details and token
+        return res.status(200).json({
+          user: user,
+          accessToken: token,
+          expiresAt: new Date(decoded.exp ?? "").toLocaleString(),
+        });
+      }
     } catch (err) {
       res.status(401).send("Unauthorized");
     }

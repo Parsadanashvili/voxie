@@ -4,7 +4,7 @@ import AvatarStep from "../../components/Registration/AvatarStep";
 import EmailStep from "../../components/Registration/EmailStep";
 import OTPStep from "../../components/Registration/OTPStep";
 import UsernameStep from "../../components/Registration/UsernameStep";
-import { CustomNextPage } from "../../types/pageProps";
+import { CustomNextPage } from "../../types/page";
 import styles from "../../styles/Auth.module.css";
 import WaitingStep from "../../components/Registration/WaitingStep";
 

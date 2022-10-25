@@ -1,25 +1,24 @@
-import { CustomNextPage } from "../types/pageProps";
+import { CustomNextPage } from "../types/page";
 import Welcome from "../components/Welcome";
 import Dashboard from "../components/Dashboard";
 import { GetServerSideProps } from "next";
 import { PrismaClient } from "@prisma/client";
 import { Room } from "../types";
-
-const auth = true;
+import { useSession } from "../hooks/useSession";
 
 const Home: CustomNextPage<{ rooms: Room[] }> = ({ rooms }) => {
-  if (auth) {
+  const { status } = useSession();
+
+  console.log(status);
+
+  if (status == "authenticated") {
     return <Dashboard rooms={rooms} />;
-  } else {
+  } else if (status == "unauthenticated") {
     return <Welcome />;
+  } else {
+    return <div></div>;
   }
 };
-
-if (auth) {
-  Home.getPageTitle = "Dashboard";
-} else {
-  Home.getPageTitle = "Welcome";
-}
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const prisma = new PrismaClient();

@@ -1,96 +1,51 @@
 import axios from "axios";
-import { getCookie } from "cookies-next";
-import { useRouter } from "next/router";
-import React, { createContext, useEffect, useState } from "react";
-import { Session, SessionContextValue, SessionProviderProps } from "./types";
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { Session, SessionContextValue } from "../types";
+import { getToken } from "../utils/jwt-token";
 
 export const SessionContext = createContext<SessionContextValue | undefined>(
   undefined
 );
 
-export const useSession = <R extends boolean>(options?: any) => {
-  const router = useRouter();
-
-  // @ts-expect-error Satisfy TS if branch on line below
-  const value: SessionContextValue<R> = React.useContext(SessionContext);
-  if (!value && process.env.NODE_ENV !== "production") {
-    throw new Error("`useSession` must be wrapped in a <SessionProvider />");
-  }
-
-  const { required, onUnauthenticated } = options ?? {};
-
-  const requiredAndNotLoading = required && value.status === "unauthenticated";
-
-  useEffect(() => {
-    if (requiredAndNotLoading) {
-      const url = `/login`;
-      if (onUnauthenticated) onUnauthenticated();
-      else router.push(url);
-    }
-  }, [requiredAndNotLoading, onUnauthenticated]);
-
-  if (requiredAndNotLoading) {
-    return { data: value.data, status: "loading" } as const;
-  }
-
-  return value;
+export type SessionProviderValue = {
+  children: ReactNode;
 };
 
-export const SessionProvider = ({
-  children,
-  refetchOnWindowFocus,
-}: SessionProviderProps) => {
-  const [session, setSession] = useState<Session>();
-
+export const SessionProvider = ({ children }: SessionProviderValue) => {
+  const [session, setSession] = useState<Session | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const _getSession = async () => {
-    try {
-      let accessToken =
-        JSON.parse(getCookie("session") as string)?.accessToken ?? "";
-
-      const response = await axios
-        .post(
-          "/api/user",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        )
-        .then((res) => res.data);
-
-      setSession(response);
-    } catch (error) {
-      console.log("Client session error: ", error as Error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    _getSession();
-  }, []);
+    const getSession = async () => {
+      const token = getToken();
 
-  useEffect(() => {
-    const visibilityHandler = () => {
-      if (refetchOnWindowFocus && document.visibilityState === "visible") {
-        _getSession();
+      if (!token) {
+        setLoading(false);
+        return;
       }
+
+      await axios
+        .get("/api/user", {
+          headers: {
+            authorization: token,
+          },
+        })
+        .then((res) => {
+          setSession(res.data);
+          setLoading(false);
+        });
     };
 
-    document.addEventListener("visibilitychange", visibilityHandler, false);
+    getSession();
+  }, []);
 
-    return () =>
-      document.removeEventListener(
-        "visibilitychange",
-        visibilityHandler,
-        false
-      );
-  }, [refetchOnWindowFocus]);
-
-  const value: any = React.useMemo(
+  const value: any = useMemo(
     () => ({
       data: session,
       status: loading

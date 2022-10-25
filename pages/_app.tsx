@@ -9,15 +9,8 @@ type ExtendedAppProps = AppProps & {
 };
 
 function MyApp({ Component, pageProps }: ExtendedAppProps) {
-  const { getPageTitle: title } = Component;
-
-  const pageTitle = title ? `${title} | Voxie` : "Voxie";
-
   return (
     <SessionProvider>
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
       <Component {...pageProps} />
     </SessionProvider>
   );

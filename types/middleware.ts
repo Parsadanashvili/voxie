@@ -1,7 +1,7 @@
-import { JWTOptions } from "./jwtProps";
+import { JWTOptions } from "./jwt";
 import { NextRequest } from "next/server";
 import { Awaitable } from ".";
-import { JWT } from "./";
+import { JWT } from ".";
 
 type AuthorizedCallback = (params: {
   token: JWT | null;
