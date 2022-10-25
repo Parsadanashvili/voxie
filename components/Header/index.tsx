@@ -11,10 +11,10 @@ import Dropdown, {
   DropdownItemText,
 } from "../Dropdown";
 import styles from "./Header.module.css";
-import { useSession } from "../../hooks/useSession";
+import useSession from "../../hooks/useSession";
 
 const Header = () => {
-  const { data: session, status } = useSession();
+  const status = "authenticated";
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,7 +29,7 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  return status === "authenticated" ? (
+  return (
     <header className={styles.wrapper}>
       <Container>
         <div className={styles.inner}>
@@ -37,38 +37,40 @@ const Header = () => {
             <div className={styles.logo}>Voxie</div>
           </div>
 
-          <div className={styles.right}>
-            <div className={styles.profile} onClick={handleClick}>
-              <h3>@{session?.user?.username}</h3>
-              <Image
-                className={styles.picture}
-                src={session?.user?.avatar ?? ""}
-                width={56}
-                height={56}
-                objectFit={"cover"}
-              />
-            </div>
+          {status === "authenticated" ? (
+            <div className={styles.right}>
+              <div className={styles.profile} onClick={handleClick}>
+                <h3>@YoChillSky</h3>
+                <Image
+                  className={styles.picture}
+                  src={"/imgs/avatar.jpg"}
+                  width={56}
+                  height={56}
+                  objectFit={"cover"}
+                />
+              </div>
 
-            <Dropdown anchorEl={anchorEl} open={open} onClose={handleClose}>
-              <DropdownItem>
-                <DropdownItemIcon>
-                  <UserIcon />
-                </DropdownItemIcon>
-                <DropdownItemText>Profile</DropdownItemText>
-              </DropdownItem>
-              <DropdownItem>
-                <DropdownItemIcon>
-                  <ArrowLeftOnRectangleIcon />
-                </DropdownItemIcon>
-                <DropdownItemText>Log Out</DropdownItemText>
-              </DropdownItem>
-            </Dropdown>
-          </div>
+              <Dropdown anchorEl={anchorEl} open={open} onClose={handleClose}>
+                <DropdownItem>
+                  <DropdownItemIcon>
+                    <UserIcon />
+                  </DropdownItemIcon>
+                  <DropdownItemText>Profile</DropdownItemText>
+                </DropdownItem>
+                <DropdownItem>
+                  <DropdownItemIcon>
+                    <ArrowLeftOnRectangleIcon />
+                  </DropdownItemIcon>
+                  <DropdownItemText>Log Out</DropdownItemText>
+                </DropdownItem>
+              </Dropdown>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </Container>
     </header>
-  ) : (
-    ""
   );
 };
 

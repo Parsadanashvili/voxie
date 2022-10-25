@@ -1,13 +1,6 @@
-import axios from "axios";
-import React, {
-  createContext,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Session, SessionContextValue } from "../types";
-import { getToken } from "../utils/jwt-token";
+import React, { createContext, ReactNode, useMemo } from "react";
+import useSession from "../hooks/useSession";
+import { SessionContextValue } from "../types";
 
 export const SessionContext = createContext<SessionContextValue | undefined>(
   undefined
@@ -18,32 +11,7 @@ export type SessionProviderValue = {
 };
 
 export const SessionProvider = ({ children }: SessionProviderValue) => {
-  const [session, setSession] = useState<Session | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const getSession = async () => {
-      const token = getToken();
-
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
-      await axios
-        .get("/api/user", {
-          headers: {
-            authorization: token,
-          },
-        })
-        .then((res) => {
-          setSession(res.data);
-          setLoading(false);
-        });
-    };
-
-    getSession();
-  }, []);
+  const { session, loading } = useSession();
 
   const value: any = useMemo(
     () => ({

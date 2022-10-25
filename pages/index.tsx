@@ -4,12 +4,10 @@ import Dashboard from "../components/Dashboard";
 import { GetServerSideProps } from "next";
 import { PrismaClient } from "@prisma/client";
 import { Room } from "../types";
-import { useSession } from "../hooks/useSession";
+import useSession from "../hooks/useSession";
 
 const Home: CustomNextPage<{ rooms: Room[] }> = ({ rooms }) => {
-  const { status } = useSession();
-
-  console.log(status);
+  const status = "authenticated";
 
   if (status == "authenticated") {
     return <Dashboard rooms={rooms} />;

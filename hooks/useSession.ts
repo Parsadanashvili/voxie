@@ -1,33 +1,37 @@
-import { useContext, useEffect } from "react";
-import { SessionContext } from "../contexts/SessionContexts";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Session } from "../types";
+import { getToken } from "../utils/jwt-token";
 
-export interface UseSessionOptions<R extends boolean> {
-  required: R;
-  /** Defaults to `signIn` */
-  onUnauthenticated?: () => void;
-}
-
-export const useSession = <R extends boolean>(
-  options?: UseSessionOptions<R>
-) => {
-  // @ts-expect-error Satisfy TS if branch on line below
-  const value: SessionContextValue<R> = useContext(SessionContext);
-
-  const { required, onUnauthenticated } = options ?? {};
-
-  const requiredAndNotLoading = required && value.status === "unauthenticated";
+const useSession = () => {
+  const [session, setSession] = useState<Session | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (requiredAndNotLoading) {
-      const url = `/login`;
-      if (onUnauthenticated) onUnauthenticated();
-      else window.location.href = url;
-    }
-  }, [requiredAndNotLoading, onUnauthenticated]);
+    const getSession = async () => {
+      const token = getToken();
 
-  if (requiredAndNotLoading) {
-    return { data: value.data, status: "loading" } as const;
-  }
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
-  return value;
+      await axios
+        .get("/api/user", {
+          headers: {
+            authorization: token,
+          },
+        })
+        .then((res) => {
+          setSession(res.data);
+          setLoading(false);
+        });
+    };
+
+    getSession();
+  }, []);
+
+  return { session, loading };
 };
+
+export default useSession;
