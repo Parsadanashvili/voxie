@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Button from "../../components/Button";
+import Button from "@components/Button";
 import styles from "../../styles/Auth.module.css";
-import OtpInput from "../OtpInput";
+import OtpInput from "@components/OtpInput";
 
 const VALUE_LENGTH = 4;
 

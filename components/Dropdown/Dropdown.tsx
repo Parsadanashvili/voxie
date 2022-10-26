@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import Popover from "../Popover";
+import Popover from "@components/Popover";
 import styles from "./Dropdown.module.css";
 
 interface Props {

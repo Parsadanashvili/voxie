@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import Button from "../Button";
-import Card from "../Card";
+import Button from "@components/Button";
+import Card from "@components/Card";
 import styles from "../../styles/Index.module.css";
 
 const Welcome = () => {
@@ -17,19 +17,12 @@ const Welcome = () => {
             nothing breaks
           </p>
 
-          <Link href={"/register"} passHref={false}>
+          <Link href={"/auth"} passHref={false}>
             <Button color="primary">
               Get started
               <ChevronRightIcon width={16} />
             </Button>
           </Link>
-
-          <div className={styles["welcome-action"]}>
-            Already registered?{" "}
-            <Link href={"/login"} passHref>
-              Sign in
-            </Link>
-          </div>
         </div>
       </Card>
     </main>

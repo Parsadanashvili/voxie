@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Card from "../../components/Card";
-import EmailStep from "../../components/Login/EmailStep";
-import OTPStep from "../../components/Login/OTPStep";
+import Card from "@components/Card";
+import EmailStep from "@components/Auth/EmailStep";
+import OTPStep from "@components/Auth/OTPStep";
 import { CustomNextPage } from "../../types/page";
 import styles from "../../styles/Auth.module.css";
 
@@ -30,7 +30,5 @@ const Login: CustomNextPage = () => {
     </main>
   );
 };
-
-Login.getPageTitle = "Login";
 
 export default Login;

@@ -1,13 +1,13 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import axios from "axios";
 import Joi from "joi";
 import Link from "next/link";
 import React, { FormEvent, useEffect, useState } from "react";
-import useForm from "../../hooks/useForm";
+import useAuth from "@hooks/useAuth";
+import useForm from "@hooks/useForm";
 import styles from "../../styles/Auth.module.css";
-import Button from "../Button";
-import Input from "../Input";
+import Button from "@components/Button";
+import Input from "@components/Input";
 
 interface Props {
   onNext: (data: { [key: string]: string }) => void | {};
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const EmailStep = ({ onNext }: Props) => {
+  const { login } = useAuth();
   const [isDisabled, setIsDisabled] = useState(true);
 
   const { values, errors, validate, inputHandler, setErrors } = useForm([
@@ -32,10 +33,7 @@ const EmailStep = ({ onNext }: Props) => {
     e.preventDefault();
 
     if (Object.keys(errors).length == 0 && !isDisabled) {
-      axios
-        .post("/api/login", {
-          email: values.email,
-        })
+      login({ email: String(values.email) })
         .then(() =>
           onNext({
             email: String(values.email),
@@ -59,7 +57,7 @@ const EmailStep = ({ onNext }: Props) => {
 
   return (
     <>
-      <h2>Login</h2>
+      <h2>Authorization</h2>
 
       <div className={styles.text}>
         <EnvelopeIcon width={20} /> Enter your email

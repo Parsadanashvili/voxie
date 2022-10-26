@@ -2,9 +2,9 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { MainLayout } from "../../layouts";
 import { Room } from "../../types";
-import Button from "../Button";
-import Container from "../Container";
-import RoomCard from "../RoomCard";
+import Button from "@components/Button";
+import Container from "@components/Container";
+import RoomCard from "@components/RoomCard";
 import styles from "./Dashboard.module.css";
 
 interface Dashboard {

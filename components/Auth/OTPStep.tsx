@@ -1,23 +1,20 @@
 import React, { FormEvent, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Button from "../../components/Button";
+import Button from "@components/Button";
 import styles from "../../styles/Auth.module.css";
-import OtpInput from "../OtpInput";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { setCookie } from "cookies-next";
+import OtpInput from "@components/OtpInput";
+import useAuth from "@hooks/useAuth";
+import Router from "next/router";
 
 const VALUE_LENGTH = 4;
 
 interface Props {
-  onNext: (data: { [key: string]: string }) => void | {};
   stepData: { [key: string]: string };
 }
 
-const OTPStep = ({ onNext, stepData }: Props) => {
-  const router = useRouter();
-
+const OTPStep = ({ stepData }: Props) => {
+  const { verifyOTP } = useAuth();
   const [otp, setOtp] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
 
@@ -25,19 +22,11 @@ const OTPStep = ({ onNext, stepData }: Props) => {
     e.preventDefault();
 
     if (otp.length == VALUE_LENGTH) {
-      return axios
-        .post("/api/login/verify", {
-          email: stepData?.email,
-          otp,
-        })
+      return verifyOTP({ email: stepData?.email, otp })
+        .catch(() => setIsInvalid(true))
         .then((res) => {
-          const session = JSON.stringify(res.data);
-
-          setCookie("session", session);
-
-          window.location.href = "/";
-        })
-        .catch(() => setIsInvalid(true));
+          Router.push("/");
+        });
     }
 
     setIsInvalid(true);
@@ -51,7 +40,7 @@ const OTPStep = ({ onNext, stepData }: Props) => {
 
   return (
     <>
-      <h2>Login</h2>
+      <h2>Authorization</h2>
 
       <div className={styles.text}>
         <LockClosedIcon width={20} /> Enter one time password

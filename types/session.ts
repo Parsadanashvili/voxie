@@ -18,8 +18,20 @@ export interface SessionProviderProps {
 
 export type SessionContextValue<R extends boolean = false> = R extends true
   ?
-      | { data: Session | undefined; status: "authenticated" }
-      | { data: null; status: "loading" }
+      | {
+          data: Session | undefined;
+          status: "authenticated";
+          loadSession: (payload: any) => void;
+        }
+      | { data: null; status: "loading"; loadSession: (payload: any) => void }
   :
-      | { data: Session | undefined; status: "authenticated" }
-      | { data: null; status: "unauthenticated" | "loading" };
+      | {
+          data: Session | undefined;
+          status: "authenticated";
+          loadSession: (payload: any) => void;
+        }
+      | {
+          data: null;
+          status: "unauthenticated" | "loading";
+          loadSession: (payload: any) => void;
+        };

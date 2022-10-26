@@ -1,4 +1,4 @@
-import cookie from "cookie";
+import cookie from "@utils/cookie";
 import * as jose from "jose";
 import { JWT, JWTEncodeParams, JWTDecodeParams } from "../types";
 import hkdf from "@panva/hkdf";

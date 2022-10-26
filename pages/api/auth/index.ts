@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
-import GenerateOtp from "../../../utils/generate-otp";
+import GenerateOtp from "@utils/generate-otp";
 
 interface ResponseData {
   message: string;

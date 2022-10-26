@@ -1,10 +1,10 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Button from "@components//Button";
+import Input from "@components/Input";
 import styles from "../../styles/Auth.module.css";
-import useForm from "../../hooks/useForm";
+import useForm from "@hooks/useForm";
 import Joi from "joi";
 
 interface Props {

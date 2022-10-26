@@ -1,8 +1,8 @@
-import { Session } from "./../../../types";
+import { Session } from "../../../types";
 import getConfig from "next/config";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
-import { encode } from "../../../utils/jwt-token";
+import { encode } from "@utils/jwt-token";
 const { serverRuntimeConfig } = getConfig();
 
 interface ResponseData extends Session {}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import Container from "../Container";
+import Container from "@components/Container";
 import {
   UserIcon,
   ArrowLeftOnRectangleIcon,
@@ -9,9 +9,9 @@ import Dropdown, {
   DropdownItem,
   DropdownItemIcon,
   DropdownItemText,
-} from "../Dropdown";
+} from "@components/Dropdown";
 import styles from "./Header.module.css";
-import useSession from "../../hooks/useSession";
+import useSession from "@hooks/useSession";
 
 const Header = () => {
   const status = "authenticated";

@@ -3,11 +3,11 @@ import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Button from "@components/Button";
+import Input from "@components/Input";
 import styles from "../../styles/Auth.module.css";
-import useForm from "../../hooks/useForm";
-import Spinner from "../Spinner";
+import useForm from "@hooks/useForm";
+import Spinner from "@components/Spinner";
 
 interface Props {
   onNext: () => void | {};
@@ -73,7 +73,7 @@ const EmailStep = ({ onNext }: Props) => {
 
       <div className={styles.action + " " + styles.primary}>
         Already registered?{" "}
-        <Link href={"/login"} passHref>
+        <Link href={"/auth"} passHref>
           Sign in
         </Link>
       </div>

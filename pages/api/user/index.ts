@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import getConfig from "next/config";
 import prisma from "../../../lib/prisma";
-import { decode } from "../../../utils/jwt-token";
+import { decode } from "@utils/jwt-token";
 
 const { serverRuntimeConfig } = getConfig();
 

@@ -1,13 +1,13 @@
 import { CustomNextPage } from "../types/page";
-import Welcome from "../components/Welcome";
-import Dashboard from "../components/Dashboard";
+import Welcome from "@components/Welcome";
+import Dashboard from "@components/Dashboard";
 import { GetServerSideProps } from "next";
 import { PrismaClient } from "@prisma/client";
 import { Room } from "../types";
-import useSession from "../hooks/useSession";
+import useAuth from "@hooks/useAuth";
 
 const Home: CustomNextPage<{ rooms: Room[] }> = ({ rooms }) => {
-  const status = "authenticated";
+  const { status } = useAuth();
 
   if (status == "authenticated") {
     return <Dashboard rooms={rooms} />;
