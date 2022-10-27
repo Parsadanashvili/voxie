@@ -41,7 +41,7 @@ export default function handler(
     });
 
     const token = await encode({
-      token: { sub: user.id },
+      token: { sub: String(user.id) },
       secret: serverRuntimeConfig.jwtSecret,
     });
 
