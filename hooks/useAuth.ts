@@ -12,7 +12,7 @@ const useAuth = <R extends boolean>() => {
     loadSession,
   }: SessionContextValue<R> = useContext(SessionContext);
 
-  const login = async (payload: { email: string }) => {
+  const auth = async (payload: { email: string }) => {
     return await axios
       .post("/api/auth", {
         email: payload.email,
@@ -28,7 +28,7 @@ const useAuth = <R extends boolean>() => {
         otp: payload.otp,
       })
       .then((res) => {
-        loadSession("testtt" as any);
+        loadSession(res.data);
 
         const session = JSON.stringify({ accessToken: res.data.accessToken });
 
@@ -37,13 +37,15 @@ const useAuth = <R extends boolean>() => {
         return res;
       });
   };
-  const register = () => {};
-  const logout = () => {};
+  const logout = () => {
+    cookie.deleteCookie("session");
+
+    loadSession(undefined);
+  };
 
   return {
-    login,
+    auth,
     verifyOTP,
-    register,
     logout,
     ...session,
     status,

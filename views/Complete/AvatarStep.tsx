@@ -9,8 +9,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import styles from "../../styles/Auth.module.css";
-import Button from "../Button";
+import styles from "@styles/Auth.module.css";
+import Button from "@components/Button";
 
 interface Props {
   onNext: () => void | {};

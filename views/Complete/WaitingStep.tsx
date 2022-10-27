@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import styles from "../../styles/Auth.module.css";
+import styles from "@styles/Auth.module.css";
 import Spinner from "@components/Spinner";
 
 const WaitingStep = () => {

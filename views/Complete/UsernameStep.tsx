@@ -1,29 +1,24 @@
-import Joi from "joi";
 import React, { FormEvent, useEffect, useState } from "react";
-import Link from "next/link";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
-import Button from "@components/Button";
+import Button from "@components//Button";
 import Input from "@components/Input";
-import styles from "../../styles/Auth.module.css";
+import styles from "@styles/Auth.module.css";
 import useForm from "@hooks/useForm";
-import Spinner from "@components/Spinner";
+import Joi from "joi";
 
 interface Props {
   onNext: () => void | {};
 }
 
-const EmailStep = ({ onNext }: Props) => {
+const UsernameStep = ({ onNext }: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
 
   const { values, errors, validate, inputHandler } = useForm([
     {
-      name: "email",
+      name: "username",
       value: "",
-      validation: Joi.string()
-        .email({ tlds: { allow: false } })
-        .required()
-        .label("Email"),
+      validation: Joi.string().max(16).min(3).required().label("Username"),
     },
   ]);
 
@@ -48,15 +43,15 @@ const EmailStep = ({ onNext }: Props) => {
       <h2>Registration</h2>
 
       <div className={styles.text}>
-        <EnvelopeIcon width={20} /> Enter your email
+        <UserIcon width={20} /> Enter your username
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
-          name="email"
-          placeholder={"E-mail"}
-          value={values?.email}
-          error={errors.email}
+          name="username"
+          placeholder={"Username"}
+          value={values?.username}
+          error={errors?.username}
           onChange={inputHandler}
           autoComplete={"off"}
         />
@@ -65,20 +60,8 @@ const EmailStep = ({ onNext }: Props) => {
           <ArrowRightIcon width={16} />
         </Button>
       </form>
-
-      <div className={styles.info}>
-        By entering your email, you’re agreeing to our Terms of Service and
-        Privacy Policy. Thanks!
-      </div>
-
-      <div className={styles.action + " " + styles.primary}>
-        Already registered?{" "}
-        <Link href={"/auth"} passHref>
-          Sign in
-        </Link>
-      </div>
     </>
   );
 };
 
-export default EmailStep;
+export default UsernameStep;

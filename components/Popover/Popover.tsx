@@ -1,10 +1,5 @@
-import React, {
-  MutableRefObject,
-  ReactElement,
-  ReactHTML,
-  ReactNode,
-  RefObject,
-} from "react";
+import useOnClickOutside from "@hooks/useOnClickOutside";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import styles from "./Popover.module.css";
 
 const resolveAnchorEl = (anchorEl: HTMLElement | Function | null) => {
@@ -89,6 +84,7 @@ interface Props {
   className?: string;
   marginThreshold?: number;
   open: boolean;
+  onClose?: () => {} | void;
 }
 
 const Popover = React.forwardRef(
@@ -109,14 +105,15 @@ const Popover = React.forwardRef(
       className,
       marginThreshold = 16,
       open,
+      onClose,
     }: Props,
     ref
   ) => {
     const paperRef = React.useRef<HTMLDivElement | null>(null);
 
-    const [isPositioned, setIsPositioned] = React.useState(open);
+    const [isPositioned, setIsPositioned] = useState(open);
 
-    const getAnchorOffset = React.useCallback(() => {
+    const getAnchorOffset = useCallback(() => {
       const anchorElement = resolveAnchorEl(anchorEl);
 
       if (!anchorElement) {
@@ -148,7 +145,7 @@ const Popover = React.forwardRef(
       anchorPosition,
     ]);
 
-    const getTransformOrigin = React.useCallback(
+    const getTransformOrigin = useCallback(
       (elemRect: { height: number; width: number }) => {
         return {
           vertical: getOffsetTop(elemRect, transformOrigin.vertical),
@@ -158,7 +155,7 @@ const Popover = React.forwardRef(
       [transformOrigin.horizontal, transformOrigin.vertical]
     );
 
-    const getPositioningStyle = React.useCallback(
+    const getPositioningStyle = useCallback(
       (element: HTMLElement) => {
         const elemRect = {
           width: element.offsetWidth,
@@ -231,7 +228,7 @@ const Popover = React.forwardRef(
       ]
     );
 
-    const setPositioningStyles = React.useCallback(() => {
+    const setPositioningStyles = useCallback(() => {
       const element: HTMLElement | null | undefined = paperRef.current;
 
       if (element) {
@@ -250,13 +247,13 @@ const Popover = React.forwardRef(
       return;
     }, [getPositioningStyle]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (open) {
         setPositioningStyles();
       }
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!open) {
         return undefined;
       }
@@ -276,6 +273,16 @@ const Popover = React.forwardRef(
         containerWindow.removeEventListener("resize", handleResize);
       };
     }, [anchorEl, open, setPositioningStyles]);
+
+    useOnClickOutside(paperRef, onClose, (e: any) => {
+      const reslovedAnchorEl = resolveAnchorEl(anchorEl);
+
+      if (reslovedAnchorEl && reslovedAnchorEl.contains(e?.target as Node)) {
+        return false;
+      }
+
+      return true;
+    });
 
     return (
       <div

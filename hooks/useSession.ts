@@ -24,6 +24,8 @@ const useSession = () => {
         })
         .then((res) => {
           setSession(res.data);
+        })
+        .catch(() => {
           setLoading(false);
         });
     };
@@ -31,7 +33,13 @@ const useSession = () => {
     getSession();
   }, []);
 
-  return { session, loading };
+  useEffect(() => {
+    if (session) {
+      setLoading(false);
+    }
+  }, [session]);
+
+  return { session, loading, setSession };
 };
 
 export default useSession;

@@ -29,10 +29,16 @@ export async function decode(params: JWTDecodeParams): Promise<JWT | null> {
   return payload;
 }
 
-export function getToken(cookieName = "session") {
-  const cookies = cookie.parse(document.cookie);
+export function getToken(cookieName = "session", req?: any) {
+  let cookies;
 
-  const session = JSON.parse(cookies[cookieName] ?? "{}");
+  if (req && req.cookies) {
+    cookies = req.cookies.get(cookieName);
+  } else {
+    cookies = cookie.parse(document.cookie)[cookieName];
+  }
+
+  const session = JSON.parse(cookies ?? "{}");
 
   return session?.accessToken;
 }

@@ -11,10 +11,10 @@ import Dropdown, {
   DropdownItemText,
 } from "@components/Dropdown";
 import styles from "./Header.module.css";
-import useSession from "@hooks/useSession";
+import useAuth from "@hooks/useAuth";
 
 const Header = () => {
-  const status = "authenticated";
+  const { status, logout } = useAuth();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -57,7 +57,7 @@ const Header = () => {
                   </DropdownItemIcon>
                   <DropdownItemText>Profile</DropdownItemText>
                 </DropdownItem>
-                <DropdownItem>
+                <DropdownItem onClick={logout}>
                   <DropdownItemIcon>
                     <ArrowLeftOnRectangleIcon />
                   </DropdownItemIcon>

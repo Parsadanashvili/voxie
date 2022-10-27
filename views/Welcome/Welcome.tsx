@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Button from "@components/Button";
 import Card from "@components/Card";
-import styles from "../../styles/Index.module.css";
+import styles from "@styles/Index.module.css";
 
 const Welcome = () => {
   return (

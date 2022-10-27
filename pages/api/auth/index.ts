@@ -12,12 +12,12 @@ export default function handler(
 ) {
   switch (req.method) {
     case "POST":
-      return login();
+      return auth();
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  async function login() {
+  async function auth() {
     const { email } = req.body;
     const user = await prisma.user.findFirst({
       where: {

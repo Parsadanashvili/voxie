@@ -1,11 +1,10 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Joi from "joi";
-import Link from "next/link";
 import React, { FormEvent, useEffect, useState } from "react";
 import useAuth from "@hooks/useAuth";
 import useForm from "@hooks/useForm";
-import styles from "../../styles/Auth.module.css";
+import styles from "@styles/Auth.module.css";
 import Button from "@components/Button";
 import Input from "@components/Input";
 
@@ -15,7 +14,7 @@ interface Props {
 }
 
 const EmailStep = ({ onNext }: Props) => {
-  const { login } = useAuth();
+  const { auth } = useAuth();
   const [isDisabled, setIsDisabled] = useState(true);
 
   const { values, errors, validate, inputHandler, setErrors } = useForm([
@@ -33,7 +32,7 @@ const EmailStep = ({ onNext }: Props) => {
     e.preventDefault();
 
     if (Object.keys(errors).length == 0 && !isDisabled) {
-      login({ email: String(values.email) })
+      auth({ email: String(values.email) })
         .then(() =>
           onNext({
             email: String(values.email),
@@ -77,13 +76,6 @@ const EmailStep = ({ onNext }: Props) => {
           <ArrowRightIcon width={16} />
         </Button>
       </form>
-
-      <div className={styles.action + " " + styles.primary}>
-        Not registered?{" "}
-        <Link href={"/register"} passHref>
-          Register
-        </Link>
-      </div>
     </>
   );
 };

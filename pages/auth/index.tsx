@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Card from "@components/Card";
-import EmailStep from "@components/Auth/EmailStep";
-import OTPStep from "@components/Auth/OTPStep";
+import EmailStep from "views/Auth/EmailStep";
+import OTPStep from "views/Auth/OTPStep";
 import { CustomNextPage } from "../../types/page";
-import styles from "../../styles/Auth.module.css";
+import styles from "@styles/Auth.module.css";
 
 const steps = [EmailStep, OTPStep];
 
-const Login: CustomNextPage = () => {
+const Auth: CustomNextPage = () => {
   const [step, setStep] = useState(0);
   const [data, setData] = useState({});
   const Step = steps[step];
@@ -31,4 +31,4 @@ const Login: CustomNextPage = () => {
   );
 };
 
-export default Login;
+export default Auth;

@@ -1,6 +1,6 @@
 import { CustomNextPage } from "../types/page";
-import Welcome from "@components/Welcome";
-import Dashboard from "@components/Dashboard";
+import Welcome from "views/Welcome";
+import Dashboard from "views/Dashboard";
 import { GetServerSideProps } from "next";
 import { PrismaClient } from "@prisma/client";
 import { Room } from "../types";

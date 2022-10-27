@@ -22,6 +22,7 @@ const Dropdown = ({ anchorEl, open, onClose, children }: Props) => {
         vertical: "top",
         horizontal: "right",
       }}
+      onClose={onClose}
       className={styles.wrapper}
     >
       <ul className={styles.menu}>{children}</ul>

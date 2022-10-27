@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import Button from "@components/Button";
-import styles from "../../styles/Auth.module.css";
+import styles from "@styles/Auth.module.css";
 import OtpInput from "@components/OtpInput";
 import useAuth from "@hooks/useAuth";
 import Router from "next/router";
@@ -23,10 +23,10 @@ const OTPStep = ({ stepData }: Props) => {
 
     if (otp.length == VALUE_LENGTH) {
       return verifyOTP({ email: stepData?.email, otp })
-        .catch(() => setIsInvalid(true))
         .then((res) => {
           Router.push("/");
-        });
+        })
+        .catch(() => setIsInvalid(true));
     }
 
     setIsInvalid(true);

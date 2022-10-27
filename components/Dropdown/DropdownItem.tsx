@@ -1,12 +1,23 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { DetailedHTMLProps, LiHTMLAttributes, ReactNode } from "react";
 import styles from "./DropdownItem.module.css";
+
+type ButtonProps = DetailedHTMLProps<
+  LiHTMLAttributes<HTMLLIElement>,
+  HTMLLIElement
+> & {
+  children: ReactNode;
+};
 
 interface Props {
   children?: ReactNode;
 }
 
-const DropdownItem = ({ children }: Props) => {
-  return <li className={styles.item}>{children}</li>;
+const DropdownItem: React.FC<ButtonProps> = ({ children, ...props }) => {
+  return (
+    <li className={styles.item} {...props}>
+      {children}
+    </li>
+  );
 };
 
 export const DropdownItemIcon = ({ children }: Props) => {
