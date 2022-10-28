@@ -14,7 +14,7 @@ import styles from "./Header.module.css";
 import useAuth from "@hooks/useAuth";
 
 const Header = () => {
-  const { status, logout } = useAuth();
+  const { status, user, logout } = useAuth();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -40,10 +40,10 @@ const Header = () => {
           {status === "authenticated" ? (
             <div className={styles.right}>
               <div className={styles.profile} onClick={handleClick}>
-                <h3>@YoChillSky</h3>
+                <h3>@{user?.username}</h3>
                 <Image
                   className={styles.picture}
-                  src={"/imgs/avatar.jpg"}
+                  src={user?.avatar ?? "/imgs/profile.png"}
                   width={56}
                   height={56}
                   objectFit={"cover"}

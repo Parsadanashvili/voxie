@@ -29,12 +29,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         });
 
-        // return basic user details and token
-        return res.status(200).json({
-          user: user,
-          accessToken: token,
-          expiresAt: new Date(decoded.exp ?? "").toLocaleString(),
-        });
+        if (user) {
+          // return basic user details and token
+          return res.status(200).json({
+            user: user,
+            accessToken: token,
+            expiresAt: new Date(decoded.exp ?? "").toLocaleString(),
+          });
+        }
+
+        throw Error("Unauthrized");
       }
     } catch (err) {
       res.status(401).send("Unauthorized");

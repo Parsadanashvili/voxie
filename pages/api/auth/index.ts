@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import GenerateOtp from "@utils/generate-otp";
+import nodemailer from "lib/nodemailer";
 
 interface ResponseData {
   message: string;
@@ -25,7 +26,13 @@ export default function handler(
       },
     });
 
-    if (!user) throw "User not found";
+    if (!user) {
+      await prisma.user.create({
+        data: {
+          email,
+        },
+      });
+    }
 
     const findOtp = await prisma.oTP.findFirst({
       where: {
@@ -33,21 +40,32 @@ export default function handler(
       },
     });
 
+    let otp = GenerateOtp(4);
+
     if (findOtp?.id != null) {
-      await prisma.oTP.delete({
+      await prisma.oTP.update({
         where: {
-          id: findOtp.id,
+          email,
+        },
+        data: {
+          otp,
+        },
+      });
+    } else {
+      await prisma.oTP.create({
+        data: {
+          email,
+          otp,
         },
       });
     }
 
-    let otp = GenerateOtp(4);
-
-    await prisma.oTP.create({
-      data: {
-        email,
-        otp,
-      },
+    nodemailer.sendMail({
+      from: process.env.SMTP_USER,
+      to: email,
+      subject: `One time password - ${otp}`,
+      text: `Your one time password is - ${otp}`,
+      html: `<div>Your one time password is - ${otp}</div>`,
     });
 
     return res.status(200).json({
