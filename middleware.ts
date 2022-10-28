@@ -6,7 +6,7 @@ const guardedRoutes = ["/api/auth", "/api/auth/verify", "/auth"];
 const guestRoutes = ["/rooms/*"];
 
 const handle = async (req: NextRequest) => {
-  const token = getToken("session", req);
+  const token = await getToken("session", req);
 
   if (token && guardedRoutes.includes(req.nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/", req.url));

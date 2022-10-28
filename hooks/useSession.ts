@@ -9,7 +9,7 @@ const useSession = () => {
 
   useEffect(() => {
     const getSession = async () => {
-      const token = getToken();
+      const token = await getToken();
 
       if (!token) {
         setLoading(false);

@@ -29,7 +29,7 @@ export async function decode(params: JWTDecodeParams): Promise<JWT | null> {
   return payload;
 }
 
-export function getToken(cookieName = "session", req?: any) {
+export async function getToken(cookieName = "session", req?: any) {
   let cookies;
 
   if (req && req.cookies) {
@@ -38,9 +38,21 @@ export function getToken(cookieName = "session", req?: any) {
     cookies = cookie.parse(document.cookie)[cookieName];
   }
 
-  const session = JSON.parse(cookies ?? "{}");
+  const session = await decode({
+    token: cookies,
+    secret: process.env.NEXT_PUBLIC_JWT_SECRET as string,
+  });
 
   return session?.accessToken;
+}
+
+export async function setToken(data: any, cookieName = "session", req?: any) {
+  let encodedData = await encode({
+    token: data,
+    secret: process.env.NEXT_PUBLIC_JWT_SECRET as string,
+  });
+
+  cookie.setCookie(cookieName, encodedData);
 }
 
 async function getDerivedEncryptionKey(secret: string | Buffer) {

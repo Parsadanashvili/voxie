@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { SessionContext } from "../contexts/SessionContexts";
 import { SessionContextValue } from "../types";
 import cookie from "@utils/cookie";
+import { setToken } from "@utils/jwt-token";
 
 const useAuth = <R extends boolean>() => {
   // @ts-expect-error Satisfy TS if branch on line below
@@ -30,9 +31,7 @@ const useAuth = <R extends boolean>() => {
       .then((res) => {
         loadSession(res.data);
 
-        const session = JSON.stringify({ accessToken: res.data.accessToken });
-
-        cookie.setCookie("session", session);
+        setToken(res.data);
 
         return res;
       });
