@@ -38,7 +38,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
         if (user?.id) {
           const url = await storage.createPresignedPost({
-            Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
+            Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
             Fields: {
               Key: `${user.id}/${name}`,
               "Content-Type": type,

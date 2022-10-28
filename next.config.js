@@ -9,9 +9,9 @@ const nextConfig = {
 
   images: {
     domains: [
-      `${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.amazonaws.com`,
-      `s3.${process.env.NEXT_PUBLIC_AWS_UPLOAD_REGION}.amazonaws.com`,
-      `${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_UPLOAD_REGION}.amazonaws.com`,
+      `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.amazonaws.com`,
+      `s3.${process.env.NEXT_PUBLIC_AWS_S3_UPLOAD_REGION}.amazonaws.com`,
+      `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_S3_UPLOAD_REGION}.amazonaws.com`,
     ],
   },
 }
