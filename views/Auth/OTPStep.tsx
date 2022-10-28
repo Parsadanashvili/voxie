@@ -24,7 +24,11 @@ const OTPStep = ({ stepData }: Props) => {
     if (otp.length == VALUE_LENGTH) {
       return verifyOTP({ email: stepData?.email, otp })
         .then((res) => {
-          Router.push("/");
+          if (!res.data?.user?.username) {
+            Router.push("/auth/complete");
+          } else {
+            Router.push("/");
+          }
         })
         .catch(() => setIsInvalid(true));
     }
