@@ -4,7 +4,7 @@ import { Session } from "../types";
 import { getToken, setToken } from "@utils/jwt-token";
 
 const useSession = () => {
-  const [session, setSession] = useState<Session | undefined>({});
+  const [session, setSession] = useState<Session | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
