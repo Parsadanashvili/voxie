@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Session } from "../types";
-import { getToken } from "@utils/jwt-token";
+import { getToken, setToken } from "@utils/jwt-token";
 
 const useSession = () => {
-  const [session, setSession] = useState<Session | undefined>(undefined);
+  const [session, setSession] = useState<Session | undefined>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -19,11 +19,13 @@ const useSession = () => {
       await axios
         .get("/api/user", {
           headers: {
-            authorization: token,
+            authorization: token?.accessToken,
           },
         })
         .then((res) => {
           setSession(res.data);
+
+          setToken(res.data);
         })
         .catch(() => {
           setLoading(false);

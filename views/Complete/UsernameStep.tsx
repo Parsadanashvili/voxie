@@ -6,15 +6,18 @@ import Input from "@components/Input";
 import styles from "@styles/Auth.module.css";
 import useForm from "@hooks/useForm";
 import Joi from "joi";
+import axios from "lib/axios";
+import { getToken } from "@utils/jwt-token";
 
 interface Props {
-  onNext: () => void | {};
+  onNext: (data?: any) => void | {};
+  stepData: { [key: string]: string };
 }
 
 const UsernameStep = ({ onNext }: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const { values, errors, validate, inputHandler } = useForm([
+  const { values, errors, validate, inputHandler, setErrors } = useForm([
     {
       name: "username",
       value: "",
@@ -22,11 +25,32 @@ const UsernameStep = ({ onNext }: Props) => {
     },
   ]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (Object.keys(errors).length == 0 && !isDisabled) {
-      return onNext();
+      const token = await getToken();
+
+      return axios
+        .post(
+          "/api/user/setUsername",
+          {
+            username: values.username,
+          },
+          {
+            headers: {
+              Authorization: token?.accessToken,
+            },
+          }
+        )
+        .then((res) => {
+          return onNext();
+        })
+        .catch((err) => {
+          setErrors({
+            username: err.response.data.message,
+          });
+        });
     }
 
     validate();
@@ -40,7 +64,7 @@ const UsernameStep = ({ onNext }: Props) => {
 
   return (
     <>
-      <h2>Registration</h2>
+      <h2>Complete</h2>
 
       <div className={styles.text}>
         <UserIcon width={20} /> Enter your username

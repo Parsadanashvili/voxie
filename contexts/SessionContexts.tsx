@@ -16,7 +16,7 @@ export const SessionProvider = ({ children }: SessionProviderValue) => {
 
   const value: any = useMemo(
     () => ({
-      data: session,
+      data: session || {},
       status: loading
         ? "loading"
         : session

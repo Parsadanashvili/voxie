@@ -43,7 +43,7 @@ export async function getToken(cookieName = "session", req?: any) {
     secret: process.env.NEXT_PUBLIC_JWT_SECRET as string,
   });
 
-  return session?.accessToken;
+  return session;
 }
 
 export async function setToken(data: any, cookieName = "session", req?: any) {

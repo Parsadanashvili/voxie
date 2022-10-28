@@ -38,7 +38,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           });
         }
 
-        throw Error("Unauthrized");
+        throw Error("Unauthorized");
       }
     } catch (err) {
       res.status(401).send("Unauthorized");

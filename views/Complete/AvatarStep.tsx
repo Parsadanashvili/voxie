@@ -11,19 +11,51 @@ import React, {
 } from "react";
 import styles from "@styles/Auth.module.css";
 import Button from "@components/Button";
+import axios from "lib/axios";
+import { getToken } from "@utils/jwt-token";
 
 interface Props {
-  onNext: () => void | {};
+  onNext: (data?: any) => void | {};
+  stepData: { [key: string]: string };
 }
 
 const AvatarStep = ({ onNext }: Props) => {
-  const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState("/imgs/avatar.jpg");
   const [selectedFile, setSelectedFile] = useState<File>();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (selectedFile) {
+      const token = await getToken();
+
+      const filename = encodeURIComponent(selectedFile.name);
+      const fileType = encodeURIComponent(selectedFile.type);
+
+      let res = await axios.post(
+        `/api/user/avatar`,
+        {
+          name: filename,
+          type: fileType,
+        },
+        {
+          headers: {
+            Authorization: token?.accessToken,
+          },
+        }
+      );
+
+      const formData = new FormData();
+
+      Object.entries({ ...res.data.fields, ...{ file: selectedFile } }).forEach(
+        ([key, value]) => {
+          formData.append(key, value as string);
+        }
+      );
+
+      await axios.post(res.data.url, formData).catch(console.log);
+    }
 
     onNext();
   };

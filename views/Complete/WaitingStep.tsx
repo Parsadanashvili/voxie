@@ -4,11 +4,9 @@ import styles from "@styles/Auth.module.css";
 import Spinner from "@components/Spinner";
 
 const WaitingStep = () => {
-  const router = useRouter();
-
   useEffect(() => {
     setTimeout(() => {
-      router.push("/");
+      window.location.href = "/";
     }, 3000);
   }, []);
 
