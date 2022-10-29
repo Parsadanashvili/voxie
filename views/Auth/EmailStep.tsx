@@ -34,7 +34,7 @@ const EmailStep = ({ onNext }: Props) => {
     if (Object.keys(errors).length == 0 && !isLoading) {
       setIsLoading(true);
 
-      auth({ email: String(values.email) })
+      await auth({ email: String(values.email) })
         .then(() => {
           onNext({
             email: String(values.email),
@@ -47,6 +47,8 @@ const EmailStep = ({ onNext }: Props) => {
 
           setIsLoading(false);
         });
+
+      return;
     }
 
     validate();
