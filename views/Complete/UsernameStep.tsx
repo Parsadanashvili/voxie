@@ -44,7 +44,9 @@ const UsernameStep = ({ onNext }: Props) => {
           }
         )
         .then((res) => {
-          return onNext();
+          return onNext({
+            username: values.username,
+          });
         })
         .catch((err) => {
           setErrors({

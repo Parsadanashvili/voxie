@@ -55,9 +55,13 @@ const AvatarStep = ({ onNext }: Props) => {
       );
 
       await axios.post(res.data.url, formData).catch(console.log);
+
+      return onNext({
+        avatar: `${res.data.url}/${res.data.fields.Key}`,
+      });
     }
 
-    onNext();
+    return onNext();
   };
 
   const handleClick = () => {

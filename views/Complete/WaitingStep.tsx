@@ -1,13 +1,33 @@
-import { useRouter } from "next/router";
+import Router from "next/router";
 import React, { useEffect } from "react";
 import styles from "@styles/Auth.module.css";
 import Spinner from "@components/Spinner";
+import { getToken, setToken } from "@utils/jwt-token";
 
-const WaitingStep = () => {
+interface Props {
+  onNext: (data?: any) => void | {};
+  stepData: { [key: string]: string };
+}
+
+const WaitingStep = ({ stepData }: Props) => {
   useEffect(() => {
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 3000);
+    (async () => {
+      const token = await getToken();
+
+      if (token && token.user) {
+        token.user.username = stepData.username;
+
+        if (stepData.avatar) {
+          token.user.avatar = stepData.avatar;
+        }
+
+        await setToken(token);
+      }
+
+      setTimeout(() => {
+        Router.reload();
+      }, 2000);
+    })();
   }, []);
 
   return (
