@@ -60,13 +60,15 @@ export default function handler(
       });
     }
 
-    mailer.send({
-      from: process.env.MAIL_FROM as string,
-      to: email,
-      subject: `One time password - ${otp}`,
-      text: `Your one time password is - ${otp}`,
-      html: `<div>Your one time password is - ${otp}</div>`,
-    });
+    await mailer
+      .send({
+        from: process.env.MAIL_FROM as string,
+        to: email,
+        subject: `One time password - ${otp}`,
+        text: `Your one time password is - ${otp}`,
+        html: `<div>Your one time password is - ${otp}</div>`,
+      })
+      .catch(console.log);
 
     return res.status(200).json({
       message: "Otp generated successfully",
