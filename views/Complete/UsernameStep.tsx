@@ -31,7 +31,7 @@ const UsernameStep = ({ onNext }: Props) => {
     if (Object.keys(errors).length == 0 && !isDisabled) {
       const token = await getToken();
 
-      return axios
+      axios
         .post(
           "/api/user/setUsername",
           {

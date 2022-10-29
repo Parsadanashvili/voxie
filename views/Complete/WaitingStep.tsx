@@ -1,4 +1,4 @@
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styles from "@styles/Auth.module.css";
 import Spinner from "@components/Spinner";
@@ -10,6 +10,8 @@ interface Props {
 }
 
 const WaitingStep = ({ stepData }: Props) => {
+  const router = useRouter();
+
   useEffect(() => {
     (async () => {
       const token = await getToken();
@@ -25,7 +27,7 @@ const WaitingStep = ({ stepData }: Props) => {
       }
 
       setTimeout(() => {
-        Router.reload();
+        router.reload();
       }, 2000);
     })();
   }, []);

@@ -5,7 +5,7 @@ import Button from "@components/Button";
 import styles from "@styles/Auth.module.css";
 import OtpInput from "@components/OtpInput";
 import useAuth from "@hooks/useAuth";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 const VALUE_LENGTH = 4;
 
@@ -14,6 +14,7 @@ interface Props {
 }
 
 const OTPStep = ({ stepData }: Props) => {
+  const router = useRouter();
   const { verifyOTP } = useAuth();
   const [otp, setOtp] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
@@ -28,9 +29,9 @@ const OTPStep = ({ stepData }: Props) => {
       await verifyOTP({ email: stepData?.email, otp })
         .then((res) => {
           if (!res.data?.user?.username) {
-            Router.push("/auth/complete");
+            router.push("/auth/complete");
           } else {
-            Router.push("/");
+            router.push("/");
           }
         })
         .catch(() => (setIsInvalid(true), setIsLoading(false)));
