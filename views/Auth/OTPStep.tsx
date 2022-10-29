@@ -6,6 +6,7 @@ import styles from "@styles/Auth.module.css";
 import OtpInput from "@components/OtpInput";
 import useAuth from "@hooks/useAuth";
 import { useRouter } from "next/router";
+import { setToken } from "@utils/jwt-token";
 
 const VALUE_LENGTH = 4;
 
@@ -27,7 +28,7 @@ const OTPStep = ({ stepData }: Props) => {
       setIsLoading(true);
 
       await verifyOTP({ email: stepData?.email, otp })
-        .then((res) => {
+        .then(async (res) => {
           if (!res.data?.user?.username) {
             router.push("/auth/complete");
           } else {
@@ -35,9 +36,9 @@ const OTPStep = ({ stepData }: Props) => {
           }
         })
         .catch(() => (setIsInvalid(true), setIsLoading(false)));
+    } else {
+      setIsInvalid(true);
     }
-
-    setIsInvalid(true);
   };
 
   const handleChange = (value: string) => {

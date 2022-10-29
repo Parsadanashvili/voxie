@@ -28,10 +28,9 @@ const useAuth = <R extends boolean>() => {
         email: payload.email,
         otp: payload.otp,
       })
-      .then((res) => {
+      .then(async (res) => {
         loadSession(res.data);
-
-        setToken(res.data);
+        await setToken(res.data);
 
         return res;
       });
