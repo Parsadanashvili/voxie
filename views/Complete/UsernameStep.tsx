@@ -16,6 +16,7 @@ interface Props {
 
 const UsernameStep = ({ onNext }: Props) => {
   const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { values, errors, validate, inputHandler, setErrors } = useForm([
     {
@@ -29,6 +30,8 @@ const UsernameStep = ({ onNext }: Props) => {
     e.preventDefault();
 
     if (Object.keys(errors).length == 0 && !isDisabled) {
+      setIsLoading(true);
+
       const token = await getToken();
 
       axios
@@ -52,6 +55,8 @@ const UsernameStep = ({ onNext }: Props) => {
           setErrors({
             username: err.response.data.message,
           });
+
+          setIsLoading(false);
         });
     }
 

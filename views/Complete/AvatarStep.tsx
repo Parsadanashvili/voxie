@@ -23,45 +23,53 @@ const AvatarStep = ({ onNext }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState("/imgs/avatar.jpg");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (selectedFile) {
+      setIsLoading(true);
+
       const token = await getToken();
 
       const filename = encodeURIComponent(selectedFile.name);
       const fileType = encodeURIComponent(selectedFile.type);
 
-      let res = await axios.post(
-        `/api/user/avatar`,
-        {
-          name: filename,
-          type: fileType,
-        },
-        {
-          headers: {
-            Authorization: token?.accessToken,
+      try {
+        let res = await axios.post(
+          `/api/user/avatar`,
+          {
+            name: filename,
+            type: fileType,
           },
-        }
-      );
+          {
+            headers: {
+              Authorization: token?.accessToken,
+            },
+          }
+        );
 
-      const formData = new FormData();
+        const formData = new FormData();
 
-      Object.entries({ ...res.data.fields, ...{ file: selectedFile } }).forEach(
-        ([key, value]) => {
+        Object.entries({
+          ...res.data.fields,
+          ...{ file: selectedFile },
+        }).forEach(([key, value]) => {
           formData.append(key, value as string);
-        }
-      );
+        });
 
-      await axios.post(res.data.url, formData).catch(console.log);
+        await axios.post(res.data.url, formData).catch(console.log);
 
-      return onNext({
-        avatar: `${res.data.url}/${res.data.fields.Key}`,
-      });
+        onNext({
+          avatar: `${res.data.url}/${res.data.fields.Key}`,
+        });
+      } catch {
+        setIsLoading(false);
+      }
+    } else {
+      onNext();
     }
-
-    return onNext();
   };
 
   const handleClick = () => {
@@ -117,7 +125,7 @@ const AvatarStep = ({ onNext }: Props) => {
           accept={"image/*"}
         />
 
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" loading={isLoading}>
           Finish
           <ArrowRightIcon width={16} />
         </Button>
