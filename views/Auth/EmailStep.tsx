@@ -47,8 +47,6 @@ const EmailStep = ({ onNext }: Props) => {
 
           setIsLoading(false);
         });
-
-      return;
     }
 
     validate();

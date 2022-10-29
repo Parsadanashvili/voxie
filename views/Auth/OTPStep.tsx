@@ -34,8 +34,6 @@ const OTPStep = ({ stepData }: Props) => {
           }
         })
         .catch(() => (setIsInvalid(true), setIsLoading(false)));
-
-      return;
     }
 
     setIsInvalid(true);
