@@ -1,4 +1,5 @@
 import Card from "@components/Card";
+import Fade from "@components/Fade";
 import React, { ReactNode, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.css";
@@ -24,12 +25,12 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children, title }) => {
   return open && isBrowser
     ? ReactDOM.createPortal(
         <div className={styles.root}>
-          <div className={styles.wrapper}>
+          <Fade className={styles.wrapper}>
             <Card width={400}>
               {title && <ModalHeader>{title}</ModalHeader>}
               {children}
             </Card>
-          </div>
+          </Fade>
 
           <div className={styles.overlay} onClick={handleClose}></div>
         </div>,

@@ -1,5 +1,5 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Room } from "../../types";
 import Button from "@components/Button";
 import Container from "@components/Container";
@@ -10,6 +10,10 @@ import StartARoomModal from "./StartARoomModal";
 import axios from "lib/axios";
 import { getToken } from "@utils/jwt-token";
 import Fade from "@components/Fade";
+
+const skeletonRooms = Array.from(
+  Array(Math.floor(Math.random() * 16) + 1).keys()
+);
 
 const Dashboard: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -59,11 +63,9 @@ const Dashboard: React.FC = () => {
               visible={showSkeleton}
               delay={10}
             >
-              {Array.from(Array(Math.floor(Math.random() * 16) + 1).keys()).map(
-                (item) => {
-                  return <RoomCard skeleton key={item} />;
-                }
-              )}
+              {skeletonRooms.map((item) => {
+                return <RoomCard skeleton key={item} />;
+              })}
             </Fade>
           )}
           {showRooms && (
