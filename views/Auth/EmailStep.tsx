@@ -15,7 +15,7 @@ interface Props {
 
 const EmailStep = ({ onNext }: Props) => {
   const { auth } = useAuth();
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { values, errors, validate, inputHandler, setErrors } = useForm([
     {
@@ -31,28 +31,26 @@ const EmailStep = ({ onNext }: Props) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (Object.keys(errors).length == 0 && !isDisabled) {
+    if (Object.keys(errors).length == 0 && !isLoading) {
+      setIsLoading(true);
+
       auth({ email: String(values.email) })
-        .then(() =>
+        .then(() => {
           onNext({
             email: String(values.email),
-          })
-        )
-        .catch((err) =>
+          });
+        })
+        .catch((err) => {
           setErrors({
             email: err,
-          })
-        );
+          });
+
+          setIsLoading(false);
+        });
     }
 
     validate();
   };
-
-  useEffect(() => {
-    if (isDisabled && Object.keys(errors).length != 0) {
-      setIsDisabled(false);
-    }
-  }, [errors]);
 
   return (
     <>
@@ -71,7 +69,7 @@ const EmailStep = ({ onNext }: Props) => {
           onChange={inputHandler}
           autoComplete={"off"}
         />
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" loading={isLoading}>
           Next
           <ArrowRightIcon width={16} />
         </Button>

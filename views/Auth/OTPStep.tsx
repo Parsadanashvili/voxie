@@ -17,11 +17,14 @@ const OTPStep = ({ stepData }: Props) => {
   const { verifyOTP } = useAuth();
   const [otp, setOtp] = useState("");
   const [isInvalid, setIsInvalid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (otp.length == VALUE_LENGTH) {
+    if (otp.length == VALUE_LENGTH && !isLoading) {
+      setIsLoading(true);
+
       return verifyOTP({ email: stepData?.email, otp })
         .then((res) => {
           if (!res.data?.user?.username) {
@@ -30,7 +33,7 @@ const OTPStep = ({ stepData }: Props) => {
             Router.push("/");
           }
         })
-        .catch(() => setIsInvalid(true));
+        .catch(() => (setIsInvalid(true), setIsLoading(false)));
     }
 
     setIsInvalid(true);
@@ -58,7 +61,7 @@ const OTPStep = ({ stepData }: Props) => {
           isInvalid={isInvalid}
         />
 
-        <Button type="submit" color="primary">
+        <Button type="submit" color="primary" loading={isLoading}>
           Next
           <ArrowRightIcon width={16} />
         </Button>

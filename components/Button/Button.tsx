@@ -1,3 +1,4 @@
+import Spinner from "@components/Spinner";
 import Link, { LinkProps } from "next/link";
 import React, {
   ButtonHTMLAttributes,
@@ -14,36 +15,32 @@ const colorClassnames = {
   danger: styles.danger,
 };
 
-// export type ButtonProps = JSX.IntrinsicElements["button"] & {
-//   color?: keyof typeof colorClassnames;
-//   href?: undefined;
-//   children: ReactNode;
-// };
-
 export type ButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 > & {
   color?: keyof typeof colorClassnames;
   icon?: ReactNode;
+  loading?: boolean;
 };
 
 const Button: React.FC<ButtonProps> = ({
   children,
   color = "primary",
   disabled,
+  loading,
   icon,
   className = "",
   ...props
 }) => {
   return (
     <button
-      disabled={disabled}
+      disabled={disabled || loading}
       className={`${styles.root} ${colorClassnames[color]} ${className}`}
       type={props.type || "button"}
       {...props}
     >
-      {children}
+      {loading ? <Spinner size="sm" /> : children}
     </button>
   );
 };
