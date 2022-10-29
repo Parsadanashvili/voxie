@@ -8,7 +8,7 @@ interface Props {
 
 const Card = ({ children, width = 350 }: Props) => {
   return (
-    <div className={styles.card} style={{ width: `${width}px` }}>
+    <div className={styles.root} style={{ width: `${width}px` }}>
       {children}
     </div>
   );

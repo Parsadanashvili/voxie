@@ -1,12 +1,5 @@
 import Spinner from "@components/Spinner";
-import Link, { LinkProps } from "next/link";
-import React, {
-  ButtonHTMLAttributes,
-  DetailedHTMLProps,
-  ForwardedRef,
-  forwardRef,
-  ReactNode,
-} from "react";
+import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 import styles from "./Button.module.css";
 
 const colorClassnames = {
@@ -20,7 +13,6 @@ export type ButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & {
   color?: keyof typeof colorClassnames;
-  icon?: ReactNode;
   loading?: boolean;
 };
 
@@ -29,7 +21,6 @@ const Button: React.FC<ButtonProps> = ({
   color = "primary",
   disabled,
   loading,
-  icon,
   className = "",
   ...props
 }) => {

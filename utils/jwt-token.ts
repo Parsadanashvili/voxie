@@ -33,7 +33,11 @@ export async function getToken(cookieName = "session", req?: any) {
   let cookies;
 
   if (req && req.cookies) {
-    cookies = req.cookies.get(cookieName);
+    if (typeof req.cookies?.get == "function") {
+      cookies = req.cookies?.get(cookieName);
+    } else {
+      cookies = req.cookies[cookieName];
+    }
   } else {
     cookies = cookie.parse(document.cookie)[cookieName];
   }

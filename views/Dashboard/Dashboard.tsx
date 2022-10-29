@@ -1,17 +1,46 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
-import React from "react";
-import { MainLayout } from "../../layouts";
+import React, { useEffect, useState } from "react";
 import { Room } from "../../types";
 import Button from "@components/Button";
 import Container from "@components/Container";
 import RoomCard from "@components/RoomCard";
 import styles from "./Dashboard.module.css";
+import MainLayout from "@layouts/MainLayout";
+import StartARoomModal from "./StartARoomModal";
+import axios from "lib/axios";
+import { getToken } from "@utils/jwt-token";
+import Fade from "@components/Fade";
 
-interface Dashboard {
-  rooms: Room[];
-}
+const Dashboard: React.FC = () => {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
+  const [showRooms, setShowRooms] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-const Dashboard: React.FC<Dashboard> = ({ rooms }) => {
+  useEffect(() => {
+    (async () => {
+      const token = await getToken();
+
+      if (token) {
+        setTimeout(() => {
+          axios
+            .get("/api/rooms", {
+              headers: {
+                Authorization: token?.accessToken,
+              },
+            })
+            .then((res) => {
+              if (res.data.data.length > 0) {
+                setShowSkeleton(false);
+                setShowRooms(true);
+                setRooms(res.data.data);
+              }
+            });
+        }, 2000);
+      }
+    })();
+  }, []);
+
   return (
     <MainLayout>
       <Container>
@@ -19,18 +48,38 @@ const Dashboard: React.FC<Dashboard> = ({ rooms }) => {
           <div className={styles.section_heading}>
             <h2>All rooms</h2>
 
-            <Button color="success">
+            <Button color="success" onClick={() => setModalIsOpen(true)}>
               <PlusIcon width={15} strokeWidth={2.7} /> Start a room
             </Button>
           </div>
 
-          <div className={styles.section_list}>
-            {rooms.map((room: Room, index: number) => {
-              return <RoomCard room={room} key={index} />;
-            })}
-          </div>
+          {showSkeleton && (
+            <Fade
+              className={styles.section_list}
+              visible={showSkeleton}
+              delay={10}
+            >
+              {Array.from(Array(Math.floor(Math.random() * 16) + 1).keys()).map(
+                (item) => {
+                  return <RoomCard skeleton key={item} />;
+                }
+              )}
+            </Fade>
+          )}
+          {showRooms && (
+            <Fade className={styles.section_list} visible={showRooms}>
+              {rooms.map((room: Room, index: number) => {
+                return <RoomCard room={room} key={index} />;
+              })}
+            </Fade>
+          )}
         </div>
       </Container>
+
+      <StartARoomModal
+        open={modalIsOpen}
+        onClose={() => setModalIsOpen(false)}
+      />
     </MainLayout>
   );
 };
