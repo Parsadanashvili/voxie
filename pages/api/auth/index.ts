@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
+import mailer from "../../../lib/mailer";
 import GenerateOtp from "@utils/generate-otp";
-import nodemailer from "lib/nodemailer";
 
 interface ResponseData {
   message: string;
@@ -60,8 +60,8 @@ export default function handler(
       });
     }
 
-    nodemailer.sendMail({
-      from: process.env.SMTP_USER,
+    mailer.send({
+      from: process.env.MAIL_FROM as string,
       to: email,
       subject: `One time password - ${otp}`,
       text: `Your one time password is - ${otp}`,
