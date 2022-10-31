@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
             <Fade
               className={styles.section_list}
               visible={showSkeleton}
-              delay={10}
+              delay={20}
             >
               {skeletonRooms.map((item) => {
                 return <RoomCard skeleton key={item} />;

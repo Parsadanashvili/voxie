@@ -1,11 +1,7 @@
+import User from "./user";
+
 export interface DefaultSession {
-  user?: {
-    id?: number | null;
-    username?: string | null;
-    email?: string | null;
-    avatar?: string | null;
-    currentRoomId?: string | number | null;
-  };
+  user?: User;
   accessToken?: string;
   expiresAt?: string;
 }
