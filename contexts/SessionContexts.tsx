@@ -1,7 +1,6 @@
 import React, { createContext, ReactNode, useMemo } from "react";
 import useSession from "@hooks/useSession";
 import { SessionContextValue } from "../types";
-import {} from "react";
 
 export const SessionContext = createContext<SessionContextValue | undefined>(
   undefined

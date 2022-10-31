@@ -12,6 +12,7 @@ import Dropdown, {
 } from "@components/Dropdown";
 import styles from "./Header.module.css";
 import useAuth from "@hooks/useAuth";
+import Link from "next/link";
 
 const Header = () => {
   const { status, user, logout } = useAuth();
@@ -34,7 +35,9 @@ const Header = () => {
       <Container>
         <div className={styles.inner}>
           <div className={styles.left}>
-            <div className={styles.logo}>Voxie</div>
+            <Link href={"/"}>
+              <div className={styles.logo}>Voxie</div>
+            </Link>
           </div>
 
           {status === "authenticated" ? (

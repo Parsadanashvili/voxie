@@ -15,12 +15,12 @@ const Room = ({ room }: { room: any }) => {
       <Container>
         <div className={styles.section}>
           <div className={styles.heading}>
-            <h2>Let’s discuss the stigma of mental health in entertainment</h2>
+            <h2>{room.title}</h2>
           </div>
 
           <Fade delay={10}>
             <div className={styles.users}>
-              {room.users.map((user: User) => {
+              {room?.users.map((user: User) => {
                 return <RoomUser user={user} key={user.id} />;
               })}
             </div>
@@ -33,7 +33,6 @@ const Room = ({ room }: { room: any }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
-  res,
   params,
 }) => {
   const token = await getToken("session", req);
