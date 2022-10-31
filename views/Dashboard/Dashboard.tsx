@@ -10,12 +10,14 @@ import StartARoomModal from "./StartARoomModal";
 import axios from "lib/axios";
 import { getToken } from "@utils/jwt-token";
 import Fade from "@components/Fade";
+import useAuth from "@hooks/useAuth";
 
 const skeletonRooms = Array.from(
   Array(Math.floor(Math.random() * 16) + 1).keys()
 );
 
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
   const [showRooms, setShowRooms] = useState<boolean>(false);
@@ -52,9 +54,11 @@ const Dashboard: React.FC = () => {
           <div className={styles.section_heading}>
             <h2>All rooms</h2>
 
-            <Button color="success" onClick={() => setModalIsOpen(true)}>
-              <PlusIcon width={15} strokeWidth={2.7} /> Start a room
-            </Button>
+            {!user?.currentRoomId && (
+              <Button color="success" onClick={() => setModalIsOpen(true)}>
+                <PlusIcon width={15} strokeWidth={2.7} /> Start a room
+              </Button>
+            )}
           </div>
 
           {showSkeleton && (

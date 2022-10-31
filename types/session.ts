@@ -4,6 +4,7 @@ export interface DefaultSession {
     username?: string | null;
     email?: string | null;
     avatar?: string | null;
+    currentRoomId?: string | number | null;
   };
   accessToken?: string;
   expiresAt?: string;

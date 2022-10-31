@@ -53,5 +53,53 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-  async function store() {}
+  async function store() {
+    const { title } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        message: "Title field is required",
+      });
+    }
+
+    try {
+      const token = req.headers.authorization;
+
+      var decoded = await decode({
+        token,
+        secret: serverRuntimeConfig.jwtSecret,
+      });
+
+      if (decoded) {
+        const user = await prisma.user.findFirst({
+          where: {
+            id: Number(decoded.sub),
+          },
+        });
+
+        if (user) {
+          const room = await prisma.room.create({
+            data: {
+              title,
+              creatorId: user.id,
+              users: {
+                connect: [{ id: user.id }],
+              },
+            },
+            include: {
+              users: true,
+            },
+          });
+
+          return res.json({
+            data: room,
+          });
+        }
+      }
+
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    } catch {}
+  }
 }
