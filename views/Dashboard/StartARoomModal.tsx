@@ -7,6 +7,7 @@ import { getToken } from "@utils/jwt-token";
 import Joi from "joi";
 import axios from "lib/axios";
 import { validateConfig } from "next/dist/server/config-shared";
+import { useRouter } from "next/router";
 import React, { FormEvent, useState } from "react";
 import styles from "./StartARoomModal.module.css";
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const StartARoomModal: React.FC<Props> = ({ open, onClose }) => {
+  const { push } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { values, errors, inputHandler, validate, setErrors } = useForm([
     {
@@ -45,7 +47,7 @@ const StartARoomModal: React.FC<Props> = ({ open, onClose }) => {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          push(`/room/${res.data.id}`);
         })
         .catch(
           (err) => (setIsLoading(false), setErrors(err?.response?.message))

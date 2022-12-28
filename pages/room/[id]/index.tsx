@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const token = await getToken("session", req);
 
-  if (params) {
+  if (params && token?.accessToken) {
     const { id: roomId } = params;
 
     if (roomId) {

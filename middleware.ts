@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const guestRoutes = ["/auth"];
 
-const guardedRoutes = ["/rooms/*", "/auth/complete"];
+const guardedRoutes = ["/room/*", "/auth/complete"];
 
 const handle = async (req: NextRequest) => {
   const token = await getToken("session", req);
