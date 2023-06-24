@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import getConfig from "next/config";
 import prisma from "../../../lib/prisma";
 import { decode } from "@utils/jwt-token";
+import { triggerAsyncId } from "async_hooks";
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -26,6 +27,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         const user = await prisma.user.findFirst({
           where: {
             id: Number(decoded.sub),
+          },
+          include: {
+            currentRoom: {
+              select: {
+                id: true,
+                title: true,
+                _count: {
+                  select: {
+                    users: true,
+                  },
+                },
+              },
+            },
           },
         });
 

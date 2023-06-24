@@ -1,16 +1,12 @@
-import React, { createContext, ReactNode, useMemo } from "react";
+import { SessionContext } from "@contexts/SessionContext";
 import useSession from "@hooks/useSession";
-import { SessionContextValue } from "../types";
-
-export const SessionContext = createContext<SessionContextValue | undefined>(
-  undefined
-);
+import { ReactNode, useMemo } from "react";
 
 export type SessionProviderValue = {
   children: ReactNode;
 };
 
-export const SessionProvider = ({ children }: SessionProviderValue) => {
+const SessionProvider = ({ children }: SessionProviderValue) => {
   const { session, loading, setSession } = useSession();
 
   const value: any = useMemo(
@@ -30,3 +26,5 @@ export const SessionProvider = ({ children }: SessionProviderValue) => {
     <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
   );
 };
+
+export default SessionProvider;

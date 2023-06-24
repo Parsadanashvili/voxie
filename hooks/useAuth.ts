@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext } from "react";
-import { SessionContext } from "../contexts/SessionContexts";
+import { SessionContext } from "../contexts/SessionContext";
 import { SessionContextValue } from "../types";
 import cookie from "@utils/cookie";
 import { setToken } from "@utils/jwt-token";

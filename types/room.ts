@@ -1,14 +1,15 @@
 export interface Room {
   id: number;
   title: string;
-  creator: {
+  creator?: {
     id: number;
     username: string;
     avatar: string;
   };
-  users: {
+  users?: {
     id: number;
     username: string;
     avatar: string;
   }[];
+  _count?: { [key: string]: number };
 }
